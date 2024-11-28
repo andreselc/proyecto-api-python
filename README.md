@@ -28,7 +28,8 @@ Este paso tambien sirve para ejecutar el paso 1 y 2 al mismo tiempo al momento d
 ```bash
 docker-compose up -d --build
 ```
-Este comando levantará los contenedores de la aplicación web, el manejador pgadmin y Postgresql. 
+Este comando levantará los contenedores de la aplicación web, el manejador pgadmin y Postgresql. Sin embargo, se recomienda realizar los comandos por separado por mayor control de las cosas.
+
 - La aplicación web estará disponible en http://localhost:8000 
 - El manejador pgadmin estará disponible en  http://localhost:5050 
 
@@ -46,15 +47,37 @@ El nombre que coloque es a su criterio
 ![](/Imagenes_readme/Paso1.1.png)
 ![](/Imagenes_readme/Paso2.png)
 ### Paso 3: Resgistrar los datos de la bd para conectarse 
-Una vez se registre un servidor, se colocaran las credenciales
+Una vez se registre un servidor, se colocaran las credenciales, de preferencia dejar por defecto el nombre de la base de datos que ya aparece por defecto que es "postgres"
+
 ```bash
 POSTGRES_USER: postgres
 POSTGRES_PASSWORD: postgres
-POSTGRES_DB: Proyecto_FastApi
+POSTGRES_DB: proyecto_fastapi
 HOST: db
 PORT: 5432
 ```
 ![](/Imagenes_readme/Paso3.png)
+## Para correr las pruebas 
+### Paso 1: Construir y Ejecutar el Proyecto con Docker Compose
+### Paso 2: Ejecutar desde el contenedor las pruebas
+Una vez este el docker levantado, desde el contenedor web se ejecutará el siguiente comando para ver el funcionamiento de la preuebas.
+
+```bash
+docker-compose exec web pytest -v
+```
+## Para correr las migraciones 
+### Paso 1: Construir y Ejecutar el Proyecto con Docker Compose
+### Paso 2: Ejecutar desde el contenedor las migraciones 
+En caso de que quiera crear alguna migracion por una modificacion, use el siguiente comando
+```bash
+docker-compose exec web alembic revision --autogenerate -m "Example model"
+```
+Para aplicar las migraciones use alguno de los siguientes comandos
+```bash
+docker-compose exec web alembic upgrade head 
+docker-compose exec web alembic upgrade id_migracion
+```
+
 ## Probar la Aplicación
 Una vez que los contenedores estén en funcionamiento, puedes probar la aplicación utilizando un navegador web o herramientas como `curl` o `Postman`, o directamente con `Swagger`, que viene integrado en la aplicación, este último lo revisas en la dirección:
 ```bash
