@@ -47,7 +47,8 @@ El nombre que coloque es a su criterio
 ![](/Imagenes_readme/Paso1.1.png)
 ![](/Imagenes_readme/Paso2.png)
 ### Paso 3: Resgistrar los datos de la bd para conectarse 
-Una vez se registre un servidor, se colocaran las credenciales, de preferencia dejar por defecto el nombre de la base de datos que ya aparece por defecto que es "postgres"
+Una vez se registre un servidor, se colocaran las credenciales, de preferencia dejar por defecto el nombre de la base de datos que ya aparece por defecto que es "postgres" o crear un conexion para cada bd.
+(En caso de decidir una sola conexion) Una vez haya cargado dele click a todas las bd para activarla y evitar errores (proyecto_fastapi y proyecto_fastapi_test)
 
 ```bash
 POSTGRES_USER: postgres
@@ -60,7 +61,7 @@ PORT: 5432
 ## Para correr las pruebas 
 ### Paso 1: Construir y Ejecutar el Proyecto con Docker Compose
 ### Paso 2: Ejecutar desde el contenedor las pruebas
-Una vez este el docker levantado, desde el contenedor web se ejecutará el siguiente comando para ver el funcionamiento de la preuebas.
+Una vez este el docker levantado, desde el contenedor web se ejecutará el siguiente comando para ver el funcionamiento de la pruebas.
 
 ```bash
 docker-compose exec web pytest -v
