@@ -5,9 +5,11 @@ uvicorn[standard]==0.32.0
 
 #db
 sqlalchemy==2.0.36
-psycopg==3.2.3
+
 sqlmodel==0.0.22
 alembic==1.14.0
+psycopg==3.2.3
+#esto es para bd asincronas
 asyncpg==0.30.0
 
 #test
