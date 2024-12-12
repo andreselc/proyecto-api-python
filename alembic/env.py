@@ -1,11 +1,16 @@
+import os
 import asyncio
 from logging.config import fileConfig
 
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy import pool
 from alembic import context
+from dotenv import load_dotenv
 
 from app.products.infrastructure.repository.productModel import SQLModel, Product  # Ajusta la ruta según tu estructura de proyecto
+
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,7 +35,7 @@ def run_migrations_offline():
     Calls to context.execute() here emit the given string to the
     script output.
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = os.getenv("DATABASE_URL")
     context.configure(
         url=url, target_metadata=target_metadata, literal_binds=True
     )
@@ -44,7 +49,7 @@ async def run_migrations_online():
     and associate a connection with the context.
     """
     connectable = create_async_engine(
-        config.get_main_option("sqlalchemy.url"),
+        os.getenv("DATABASE_URL"),
         poolclass=pool.NullPool,
     )
 

@@ -18,3 +18,6 @@ httpx==0.27.2
 
 # async
 greenlet==3.1.1
+
+#para las varialbles de entorno
+python-dotenv
