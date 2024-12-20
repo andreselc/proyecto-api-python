@@ -1,7 +1,8 @@
 from app.products.domain.entities.product import Product
 from app.products.domain.services.calculate_price import calculate_price
+from app.common.domain.entity import Entity
 
-class ProductAggregate:
+class ProductAggregate(Entity):
     def __init__(self, product: Product):
         self.product = product
 
@@ -17,3 +18,6 @@ class ProductAggregate:
             self.product.update(name, code, description, price, margin_profit, cost, status)
         else:
             self.product.update(name, code, description, None, margin_profit, cost, status)
+
+    def get(self):
+        return self.product

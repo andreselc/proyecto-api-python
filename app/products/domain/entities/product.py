@@ -6,8 +6,9 @@ from app.products.domain.value_objects.price import Price
 from app.products.domain.value_objects.margin_profit import MarginProfit
 from app.products.domain.value_objects.cost import Cost
 from app.products.domain.enums.status import Status
+from app.common.domain.entity import Entity
 
-class Product:
+class Product(Entity):
     def __init__(self, id: ID, name: Name, code: Code, description: Description, price: Price, margin_profit: MarginProfit, cost: Cost, status: Status):
         self.id = id
         self.name = name
@@ -45,3 +46,6 @@ class Product:
             self.cost = Cost.create(cost)
         if status:
             self.status = Status[status.upper()]
+
+    def get(self):
+        return self
