@@ -11,5 +11,8 @@ router = APIRouter()
 async def create_product(product_dto: CreateProductDto, session: AsyncSession = Depends(database.get_session)):
     repo = ProductRepository(session)
     product_service = CreateProductService(repo)
-    await product_service.create_product(product_dto)
-    return {"message": "Product created successfully"}
+    success = await product_service.create_product(product_dto)
+    if success:
+        return {"message": "Product created successfully"}
+    else:
+        raise HTTPException(status_code=400, detail="Failed to create product")

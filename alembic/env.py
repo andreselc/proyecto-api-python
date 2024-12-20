@@ -7,7 +7,7 @@ from sqlalchemy import pool
 from alembic import context
 from dotenv import load_dotenv
 
-from app.products.infrastructure.repository.productModel import SQLModel, Product  # Ajusta la ruta según tu estructura de proyecto
+from app.products.infrastructure.repository.productModel import SQLModel, ProductModel  # Ajusta la ruta según tu estructura de proyecto
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
