@@ -7,7 +7,9 @@ from app.products.application.dtos.createProductDto import CreateProductDto
 from app.products.infrastructure.repository.productRepository import ProductRepository
 from app.products.infrastructure.repository import database
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Products"]
+)
 
 @router.post("/products", status_code=status.HTTP_201_CREATED)
 async def create_product(product_dto: CreateProductDto, session: AsyncSession = Depends(database.get_session)):
