@@ -16,11 +16,12 @@ router = APIRouter(
 async def create_product(product_dto: CreateProductDto, session: AsyncSession = Depends(database.get_session)):
     repo = ProductRepository(session)
     product_service = CreateProductService(repo)
-    success = await product_service.create_product(product_dto)
-    if success:
-        return {"message": "Product created successfully"}
-    else:
-        raise HTTPException(status_code=400, detail="Failed to create product")
+    try:
+        success = await product_service.create_product(product_dto)
+        if success:
+            return {"message": "Product created successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/products", status_code=status.HTTP_200_OK)
 async def list_products(session: AsyncSession = Depends(database.get_session)):
