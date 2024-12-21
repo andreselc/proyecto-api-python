@@ -4,7 +4,9 @@ from app.products.application.services.createProduct import CreateProductService
 from app.products.application.services.getProducts import GetProductsService
 from app.products.application.services.getProductById import GetProductByIdService
 from app.products.application.dtos.createProductDto import CreateProductDto
+from app.products.application.dtos.updateProductDto import UpdateProductDto
 from app.products.application.services.deleteProduct import DeleteProductService
+from app.products.application.services.updateProduct import UpdateProductService
 from app.products.infrastructure.repository.productRepository import ProductRepository
 from app.products.infrastructure.repository import database
 
@@ -49,4 +51,15 @@ async def delete_product(product_id: str, session: AsyncSession = Depends(databa
         return {"message": "Product deleted successfully"}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+@router.patch("/products/{product_id}", status_code=status.HTTP_200_OK)
+async def update_product(product_id: str, product_dto: UpdateProductDto, session: AsyncSession = Depends(database.get_session)):
+    repo = ProductRepository(session)
+    product_service = UpdateProductService(repo)
+    try:
+        success = await product_service.update_product(product_id, product_dto)
+        if success:
+            return {"message": "Product updated successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     

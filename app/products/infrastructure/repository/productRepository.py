@@ -20,7 +20,7 @@ class ProductRepository(IProductRepository[ProductAggregate]):
 
     async def update_product(self, product_aggregate: ProductAggregate) -> ProductAggregate:
         product_model = aggregate_to_model(product_aggregate)
-        product_model.updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Establecer el valor de updated_at como cadena de texto
+        product_model.updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         await self.session.merge(product_model)
         await self.session.commit()
         return product_aggregate

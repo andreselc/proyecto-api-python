@@ -8,3 +8,4 @@ class UpdateProductDto(BaseModel):
     description: Optional[str] = None
     profit_margin: Optional[float] = None
     cost: Optional[float] = None
+    status: Optional[str] = None
