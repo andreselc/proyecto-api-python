@@ -37,7 +37,7 @@ class ProductRepository(IProductRepository[ProductAggregate]):
         result = await self.session.execute(select(ProductModel).where(ProductModel.id == product_id))
         product_model = result.scalar_one_or_none()
         if product_model:
-            return ProductAggregate(product_model)
+            return model_to_domain(product_model)
         return None
 
     async def get_products(self) -> List[ProductAggregate]:
