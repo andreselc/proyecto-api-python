@@ -6,7 +6,7 @@ from typing import Optional
 class UpdateUserDto(BaseModel):
     email: Optional[str] = Field(None, description="El correo del usuario", example="correo@gmail.com")
     username: Optional[str]  = Field(None, description="El nombre de usuario", example="johndoe")
-    password: Optional[str]  = Field(None, description="La contraseña del usuario", example="password")
+    password: Optional[str]  = Field(None, description="La contraseña del usuario (min 7 caracteres)", example="password", min_length=7)
  
     @field_validator('email')
     def validate_email(cls, value):

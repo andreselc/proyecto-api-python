@@ -28,7 +28,7 @@ class IUserRepository(ABC, Generic[T]):
     @abstractmethod
     async def get_user_me(self) -> None:
         pass
-    
+
     @abstractmethod
-    async def create_Super_Admin(self) -> None:
+    async def IsExistSuperAdmin(self) -> None:
         pass
