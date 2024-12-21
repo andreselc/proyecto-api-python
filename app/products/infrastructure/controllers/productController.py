@@ -4,6 +4,7 @@ from app.products.application.services.createProduct import CreateProductService
 from app.products.application.services.getProducts import GetProductsService
 from app.products.application.services.getProductById import GetProductByIdService
 from app.products.application.dtos.createProductDto import CreateProductDto
+from app.products.application.services.deleteProduct import DeleteProductService
 from app.products.infrastructure.repository.productRepository import ProductRepository
 from app.products.infrastructure.repository import database
 
@@ -37,3 +38,14 @@ async def get_product_by_id(product_id: str, session: AsyncSession = Depends(dat
         return product
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_product(product_id: str, session: AsyncSession = Depends(database.get_session)):
+    repo = ProductRepository(session)
+    product_service = DeleteProductService(repo)
+    try:
+        await product_service.delete_product(product_id)
+        return {"message": "Product deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    

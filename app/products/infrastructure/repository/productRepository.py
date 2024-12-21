@@ -25,13 +25,12 @@ class ProductRepository(IProductRepository[ProductAggregate]):
         await self.session.commit()
         return product_aggregate
 
-    async def delete_product(self, product_id: str) -> ProductAggregate:
+    async def delete_product(self, product_id: str) -> None:
         result = await self.session.execute(select(ProductModel).where(ProductModel.id == product_id))
         product_model = result.scalar_one_or_none()
         if product_model:
             await self.session.delete(product_model)
             await self.session.commit()
-        return ProductAggregate(product_model)
 
     async def get_product_by_id(self, product_id: str) -> ProductAggregate:
         result = await self.session.execute(select(ProductModel).where(ProductModel.id == product_id))
