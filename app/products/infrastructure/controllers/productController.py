@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.products.application.services.createProduct import CreateProductService
+from app.products.application.services.getProducts import GetProductsService
 from app.products.application.dtos.createProductDto import CreateProductDto
 from app.products.infrastructure.repository.productRepository import ProductRepository
 from app.products.infrastructure.repository import database
@@ -16,3 +17,10 @@ async def create_product(product_dto: CreateProductDto, session: AsyncSession = 
         return {"message": "Product created successfully"}
     else:
         raise HTTPException(status_code=400, detail="Failed to create product")
+    
+@router.get("/products", status_code=status.HTTP_200_OK)
+async def list_products(session: AsyncSession = Depends(database.get_session)):
+    repo = ProductRepository(session)
+    product_service = GetProductsService(repo)
+    products = await product_service.list_products()
+    return products

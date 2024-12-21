@@ -4,6 +4,7 @@ from sqlalchemy.future import select
 from app.products.infrastructure.repository.productModel import ProductModel
 from app.products.domain.ports.IProductRepository import IProductRepository
 from app.products.domain.aggregate_root import ProductAggregate
+from app.products.infrastructure.mappers.model_to_domain import model_to_domain
 from app.products.infrastructure.mappers.aggregate_to_model import aggregate_to_model
 from datetime import datetime
 
@@ -42,4 +43,4 @@ class ProductRepository(IProductRepository[ProductAggregate]):
     async def get_products(self) -> List[ProductAggregate]:
         result = await self.session.execute(select(ProductModel))
         product_models = result.scalars().all()
-        return [ProductAggregate(product_model) for product_model in product_models]
+        return [model_to_domain(product_model) for product_model in product_models]
