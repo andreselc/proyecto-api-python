@@ -39,7 +39,7 @@ async def get_product_by_id(product_id: str, session: AsyncSession = Depends(dat
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
-@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/products/{product_id}", status_code=status.HTTP_200_OK)
 async def delete_product(product_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = ProductRepository(session)
     product_service = DeleteProductService(repo)
