@@ -22,7 +22,7 @@ class IUserRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def get_users(self, user_role: str) -> List[T]:
+    async def get_users(self) -> List[T]:
         pass
 
     @abstractmethod
@@ -30,5 +30,9 @@ class IUserRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def IsExistSuperAdmin(self) -> None:
+    async def IsExistUserName(self, user_name: str) ->  T:
         pass
+
+    @abstractmethod
+    async def IsExistEmail(self, email_user: str) -> T:
+       pass

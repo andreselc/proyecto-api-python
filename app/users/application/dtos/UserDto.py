@@ -1,5 +1,4 @@
 from datetime import datetime
-from app.users.domain.userAgreggates.Enums.roleEnum import Role
 from pydantic import BaseModel
 
 class UserDto(BaseModel):
@@ -9,7 +8,7 @@ class UserDto(BaseModel):
     email: str 
     username: str 
     password: str 
-    role: Role
+    role: str
     createdAt: datetime 
     updatedAt: datetime | None 
 

@@ -6,7 +6,7 @@ class CreateUserDto(BaseModel):
     name: str = Field(..., description="El nombre del usuario", example="John")
     email: str = Field(..., description="El correo del usuario", example="correo@gmail.com")
     username: str = Field(..., description="El nombre de usuario", example="johndoe")
-    password: str = Field(..., description="La contraseña del usuario (min 7 caracteres)", example="password", min_length=7)
+    password: str = Field(..., description="La contraseña del usuario (min 7 caracteres)", example="password")
     role: str = Field(..., description="Rol del usuario (manager, custumer) - siempre en minuscula", example="manager or customer")
 
     @field_validator('email')
