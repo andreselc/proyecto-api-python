@@ -33,8 +33,8 @@ class User(Entity):
         if username:
             self.username = Username.create(username)
         if email:
-            self.email = Password.create(password)
+            self.email = Email.create(email)
         if password:
-            self.password = password
+            self.password = Password.create(password)
         if name:
-                self.name = Name.create(name)
+             self.name = Name.create(name)

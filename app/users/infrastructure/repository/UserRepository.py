@@ -46,6 +46,7 @@ class UserRepository(IUserRepository[User]):
     
     async def update_user(self, user_aggregate: AggregateUser) -> None:
         if self.session is not None:
+            print('correeo actualizado',user_aggregate.user.email.get())
             user_model= Aggregate_to_model(user_aggregate)
             user_model.updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             await self.session.merge(user_model)
@@ -73,7 +74,8 @@ class UserRepository(IUserRepository[User]):
                 return None
             if retorar_dto:
                 return model_to_dto(user)
-            return model_to_Aggregate(user) 
+            else:
+                return model_to_Aggregate(user) 
     
 
 
