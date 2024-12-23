@@ -21,9 +21,11 @@ async def create_product(product_dto: CreateProductDto, session: AsyncSession = 
     repo = ProductRepository(session)
     product_service = CreateProductService(repo)
     try:
-        success = await product_service.create_product(product_dto)
-        if success:
-            return {"message": "Product created successfully"}
+        
+        product_aggregate = await product_service.create_product(product_dto)
+        product_dto = domain_to_dto(product_aggregate)
+        return {"message": "Product created successfully", "product": product_dto}
+    
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     

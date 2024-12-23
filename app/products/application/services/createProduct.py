@@ -6,7 +6,7 @@ class CreateProductService:
     def __init__(self, repo: IProductRepository[ProductAggregate]):
         self.repo = repo
 
-    async def create_product(self, product_dto: CreateProductDto) -> bool:
+    async def create_product(self, product_dto: CreateProductDto) -> ProductAggregate:
         # Verificar si el código del producto ya existe
         existing_products = await self.repo.get_products()
         for product in existing_products:
@@ -22,4 +22,4 @@ class CreateProductService:
             status="active"
         )
         await self.repo.create_product(product_aggregate)
-        return True
+        return product_aggregate
