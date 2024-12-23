@@ -27,14 +27,12 @@ class UpdateUser:
         if email is not None:
             raise ValueError(f"The email {user_dto.email} is already registered")
 
-        print('correeo que voy a actualizar',user_dto.email)
         user_aggregate.update(
             email= user_dto.email,
             username= user_dto.username,
             password= user_dto.password,
             name= user_dto.name
         )
-        print('correeo que se guardo en aggregate',user_aggregate.user.email.get())
         await self.repo.update_user(user_aggregate)
         return True
 

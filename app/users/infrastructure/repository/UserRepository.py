@@ -38,15 +38,17 @@ class UserRepository(IUserRepository[User]):
                 return None
             return model_to_Aggregate(user) #retorna el user 
 
-    async def get_users(self) -> List[UserDto]:  
+    async def get_users(self, role: str) -> List[UserDto]:  
         if self.session is not None:
-            results = await self.session.exec(select(User))
+            query = select(User)
+            if role:
+                query = query.where(User.role == role.lower())
+            results = await self.session.exec(query)
             user_models = results.scalars().all()
             return [model_to_dto(user_model) for user_model in user_models]
     
     async def update_user(self, user_aggregate: AggregateUser) -> None:
         if self.session is not None:
-            print('correeo actualizado',user_aggregate.user.email.get())
             user_model= Aggregate_to_model(user_aggregate)
             user_model.updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             await self.session.merge(user_model)

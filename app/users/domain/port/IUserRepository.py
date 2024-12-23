@@ -22,7 +22,7 @@ class IUserRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def get_users(self) -> List[T]:
+    async def get_users(self, role:str) -> List[T]:
         pass
 
     @abstractmethod

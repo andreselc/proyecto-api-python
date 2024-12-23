@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Query
 from typing import Annotated
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.users.infrastructure.db.database import get_session
@@ -39,10 +39,10 @@ async def login(user_login: Annotated[OAuth2PasswordRequestForm, Depends()], ses
          
 
 @router.get("/users/all",status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["superadmin"]))]) 
-async def get_users(session: AsyncSession = Depends(get_session)):
+async def get_users(session: AsyncSession = Depends(get_session), role: str = Query(None, description="Filter by role (manager-customer-superadmin)")):
     repo = UserRepository(session)
     user_service =GetUsersService(repo)
-    respuesta = await user_service.list_users()
+    respuesta = await user_service.list_users(role)
     return respuesta
 
 @router.get("/users/{user_id}",status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["superadmin"]))]) 

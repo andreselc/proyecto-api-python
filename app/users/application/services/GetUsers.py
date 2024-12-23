@@ -6,6 +6,6 @@ class GetUsers:
     def __init__(self, repo: IUserRepository[AggregateUser]):
         self.repo = repo
 
-    async def list_users(self) -> list[UserDto]:
-        users = await self.repo.get_users()
+    async def list_users(self, role:str) -> list[UserDto]:
+        users = await self.repo.get_users(role)
         return users
