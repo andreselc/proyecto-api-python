@@ -10,7 +10,7 @@ class IUserRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def update_user(self, user_id: str) -> None:
+    async def update_user(self) -> None:
         pass
 
     @abstractmethod
@@ -18,15 +18,11 @@ class IUserRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def get_user_by_id(self, user_id: str) -> T:
+    async def get_user_by_id(self, user_id: str, retorar_dto: bool) -> T:
         pass
 
     @abstractmethod
     async def get_users(self) -> List[T]:
-        pass
-
-    @abstractmethod
-    async def get_user_me(self) -> None:
         pass
 
     @abstractmethod

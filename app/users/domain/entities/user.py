@@ -29,10 +29,12 @@ class User(Entity):
         role= Role(role.lower())
         return cls(id, name, username, email, password, role)
 
-    def update(self, username: str = None, email: str= None, password: str =None):
+    def update(self, username: str = None, email: str= None, password: str =None, name: str = None):    
         if username:
             self.username = Username.create(username)
         if email:
             self.email = Password.create(password)
         if password:
             self.password = password
+        if name:
+                self.name = Name.create(name)

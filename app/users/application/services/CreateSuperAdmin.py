@@ -1,6 +1,6 @@
 from app.users.domain.port.IUserRepository import IUserRepository 
 from app.users.domain.aggregate.aggregate_user import AggregateUser
-from app.users.auth.auth import get_password_hash
+
 
 class CreateSuperAdmin:
     def __init__(self, repo: IUserRepository[AggregateUser]):
@@ -16,7 +16,7 @@ class CreateSuperAdmin:
             name = "Daniel",
             email= "ecommerce_superadmin@gmail.com",
             username= "superadmin",
-            password= get_password_hash("ContraSupAdmin123"),
+            password= "ContraSupAdmin123",
             role= "superadmin"
         )
         

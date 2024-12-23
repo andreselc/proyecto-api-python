@@ -5,10 +5,11 @@ from app.users.infrastructure.db.database import get_session
 from app.users.application.services.CreateUser import CreateUser as CreateUserService
 from app.users.application.services.LoginUser import LoginUser as LoginUserService
 from app.users.application.services.GetUsers import GetUsers as GetUsersService
-from app.users.application.services.GetUserMe import GetUserMe as GetUserMeService
+from app.users.application.services.GetUserById import GetUserById as GetUserByIdService
+from app.users.application.services.DeleteUser import DeleteUser as DeleteUserService
+from app.users.application.services.UpdateUser import UpdateUser as UpdateUserService
 from app.users.application.dtos.CreateUserDto import CreateUserDto
-from app.users.application.dtos.LoginUserDto import LoginUserDto
-from app.users.application.dtos.UserDto import UserDto
+from app.users.application.dtos.UpdateUserDto import UpdateUserDto
 from app.users.infrastructure.model.ModelUser import User
 from app.users.infrastructure.repository.UserRepository import UserRepository
 
@@ -37,12 +38,44 @@ async def login(user_login: Annotated[OAuth2PasswordRequestForm, Depends()], ses
     return respuesta 
          
 
-@router.get("/users/all",dependencies=[Depends(RoleChecker(["superadmin"]))]) 
+@router.get("/users/all",status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["superadmin"]))]) 
 async def get_users(session: AsyncSession = Depends(get_session)):
     repo = UserRepository(session)
     user_service =GetUsersService(repo)
     respuesta = await user_service.list_users()
     return respuesta
+
+@router.get("/users/{user_id}",status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["superadmin"]))]) 
+async def get_user_by_id(user_id:str,session: AsyncSession = Depends(get_session)):
+    repo = UserRepository(session)
+    user_service =GetUserByIdService(repo)
+    try:
+        respuesta = await user_service.get_user_by_id(user_id)
+        return respuesta
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))    
+
+@router.delete("/users/{user_id}",status_code=status.HTTP_200_OK,  dependencies=[Depends(RoleChecker(["superadmin"]))]) 
+async def delete_user(user_id:str,session: AsyncSession = Depends(get_session)):
+
+    repo = UserRepository(session)
+    user_service =DeleteUserService(repo)
+    success = await user_service.delete_user_id(user_id)
+    if(success):
+        return {"message": "User deleted successfully"}
+      
+
+@router.patch("/users/{user_id}",status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["superadmin"]))]) 
+async def update_user(user_id:str, user_update: UpdateUserDto,session: AsyncSession = Depends(get_session)):
+    pass
+    repo = UserRepository(session)
+    user_service =UpdateUserService(repo)
+    try:
+        success= await user_service.update_user(user_id, user_update)
+        if(success):
+            return {"message": "User updated successfully"}
+    except ValueError as e:
+         raise HTTPException(status_code=400, detail=str(e))   
 
 @router.get("/users/me") 
 async def get_me_user(current_user: Annotated[User, Depends(get_current_user)]):

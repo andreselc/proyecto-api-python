@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.users.infrastructure.controller.userController import router as user_router
 from app.users.infrastructure.events.boot_event import boot_superadmin
+
 app = FastAPI()
 
 app.add_middleware(

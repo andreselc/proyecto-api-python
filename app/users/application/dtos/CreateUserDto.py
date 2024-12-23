@@ -12,9 +12,9 @@ class CreateUserDto(BaseModel):
     @field_validator('email')
     def validate_email(cls, value):
         if value is None or value == "":
-            raise ValueError('El correo electrónico es requerido.')
+            raise ValueError('Email is rrequired.')
         # Expresión regular para validar el formato del correo electrónico
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         if not re.match(email_regex, value):
-            raise ValueError('El formato del correo electrónico es inválido.')
+            raise ValueError('Invalid email format.')
         return value

@@ -7,7 +7,6 @@ def model_to_dto(user: User) -> UserDto:
         name = user.name, 
         email= user.email, 
         username= user.username, 
-        password = user.password,
         role= user.role,
         createdAt= user.created_at,
         updatedAt= user.updated_at 

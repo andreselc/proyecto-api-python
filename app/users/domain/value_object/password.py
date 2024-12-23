@@ -1,4 +1,5 @@
 from app.common.domain.value_object import ValueObject
+from app.users.auth.utils import get_password_hash
 
 class Password(ValueObject):
 
@@ -7,7 +8,7 @@ class Password(ValueObject):
     
     @classmethod
     def create(cls, password: str):
-        return cls(password)
+        return cls(get_password_hash(password))
     
     def get(self):
         return self.password

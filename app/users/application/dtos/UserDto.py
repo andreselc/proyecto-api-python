@@ -7,7 +7,6 @@ class UserDto(BaseModel):
     name: str 
     email: str 
     username: str 
-    password: str 
     role: str
     createdAt: datetime 
     updatedAt: datetime | None 
