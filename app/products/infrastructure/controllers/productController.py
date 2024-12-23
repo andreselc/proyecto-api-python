@@ -9,6 +9,8 @@ from app.products.application.services.deleteProduct import DeleteProductService
 from app.products.application.services.updateProduct import UpdateProductService
 from app.products.infrastructure.repository.productRepository import ProductRepository
 from app.products.infrastructure.repository import database
+from app.products.infrastructure.mappers.domain_to_dto import domain_to_dto
+
 
 router = APIRouter(
     tags=["Products"]
@@ -29,7 +31,8 @@ async def create_product(product_dto: CreateProductDto, session: AsyncSession = 
 async def list_products(session: AsyncSession = Depends(database.get_session)):
     repo = ProductRepository(session)
     product_service = GetProductsService(repo)
-    products = await product_service.list_products()
+    product_aggregates = await product_service.list_products()
+    products = [domain_to_dto(product) for product in product_aggregates]
     return products
 
 @router.get("/products/{product_id}", status_code=status.HTTP_200_OK)
@@ -37,8 +40,8 @@ async def get_product_by_id(product_id: str, session: AsyncSession = Depends(dat
     repo = ProductRepository(session)
     product_service = GetProductByIdService(repo)
     try:
-        product = await product_service.get_product_by_id(product_id)
-        return product
+        product_aggregate = await product_service.get_product_by_id(product_id)
+        return domain_to_dto(product_aggregate)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
