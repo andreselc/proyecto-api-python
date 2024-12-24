@@ -5,11 +5,10 @@ uvicorn[standard]==0.32.0
 
 #db
 sqlalchemy==2.0.36
-psycopg2-binary==2.9.10
-#esto es para bd normales
-psycopg==3.2.3
+
 sqlmodel==0.0.22
 alembic==1.14.0
+psycopg==3.2.3
 #esto es para bd asincronas
 asyncpg==0.30.0
 
@@ -24,3 +23,6 @@ greenlet==3.1.1
 pyjwt==2.10.0
 python-multipart==0.0.17
 passlib[bcrypt]==1.7.4
+
+#para las varialbles de entorno
+python-dotenv
