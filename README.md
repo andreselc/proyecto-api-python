@@ -75,7 +75,7 @@ docker-compose exec web alembic revision --autogenerate -m "Example model"
 ```
 Para aplicar las migraciones use alguno de los siguientes comandos
 ```bash
-docker-compose exec web alembic upgrade head 
+docker-compose exec web alembic upgrade heads 
 docker-compose exec web alembic upgrade id_migracion
 ```
 
@@ -84,3 +84,11 @@ Una vez que los contenedores estén en funcionamiento, puedes probar la aplicaci
 ```bash
 http://localhost:8000/docs
 ```
+
+Tendrán disponible apenas corra la aplicacion un usuario (superadmin) default que permitira crear usuario de todo tipo y con ello pobrar la funcionalidad de cada endpoint
+
+```bash
+Username: superadmin
+Password: ContraSupAdmin123
+```
+
