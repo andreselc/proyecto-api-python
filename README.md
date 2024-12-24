@@ -75,7 +75,7 @@ docker-compose exec web alembic revision --autogenerate -m "Example model"
 ```
 Para aplicar las migraciones use alguno de los siguientes comandos
 ```bash
-docker-compose exec web alembic upgrade head 
+docker-compose exec web alembic upgrade heads 
 docker-compose exec web alembic upgrade id_migracion
 ```
 
