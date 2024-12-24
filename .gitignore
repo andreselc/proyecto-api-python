@@ -1,2 +1,5 @@
 app/**/__pycache__/
 tests/**/__pycache__/
+alembic/__pycache__/
+alembic/versions/__pycache__/
+.env
