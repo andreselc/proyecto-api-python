@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.inventory.infrastructure.repository.inventoryRepository import InventoryRepository
 from app.inventory.application.dtos.createInventoryDto import CreateInventoryDto
 from app.inventory.application.dtos.updateInventoryDto import UpdateInventoryDto
 from app.inventory.application.dtos.inventoryDto import Inventory
@@ -8,6 +9,7 @@ from app.inventory.application.services.updateInventory import UpdateInventorySe
 from app.inventory.application.services.getInventoryById import GetInventoryByIdService
 from app.users.auth.Role_Checker import RoleChecker
 from app.users.auth.auth import get_current_user
+from app.inventory.infrastructure.mappers.domain_to_dto import domain_to_dto
 from app.inventory.infrastructure.db import database
 
 router = APIRouter(
@@ -16,5 +18,32 @@ router = APIRouter(
 
 @router.post("/inventory", status_code=status.HTTP_201_CREATED, dependencies=[Depends(RoleChecker(["manager"]))])
 async def create_inventory(inventory_dto: CreateInventoryDto, session: AsyncSession = Depends(database.get_session)):
-    pass
-
+    repo = InventoryRepository(session)
+    inventory_service = CreateInventoryService(repo)
+    try:
+        inventory_aggregate = await inventory_service.create_inventory(inventory_dto)
+        inventory_dto = domain_to_dto(inventory_aggregate)
+        return {"message": "Inventory assigned to product successfuly"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/inventories/{inventory_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
+async def get_inventory_by_id(inventory_id: str, session: AsyncSession = Depends(database.get_session)):
+    repo = InventoryRepository(session)
+    inventory_service = GetInventoryByIdService(repo)
+    try:
+        inventory_aggregate = await inventory_service.get_inventory_by_id(inventory_id)
+        return domain_to_dto(inventory_aggregate)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+@router.patch("inventories/{inventory_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
+async def update_inventory(inventory_id: str, inventory_dto: UpdateInventoryDto, session: AsyncSession = Depends(database.get_session)):
+    repo = InventoryRepository(session)
+    inventory_service = UpdateInventoryService(repo)
+    try:
+        success = await inventory_service.update_inventory(inventory_id, inventory_dto)
+        if success:
+            return {"message": "Inventory updated successfuly"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
