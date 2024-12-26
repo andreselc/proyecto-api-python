@@ -8,7 +8,7 @@ from app.inventory.infrastructure.mappers.aggregate_to_model import aggregate_to
 from app.inventory.infrastructure.mappers.model_to_domain import model_to_domain
 from datetime import datetime
 
-class InventoryRepository(InventoryAggregate[InventoryAggregate]):
+class InventoryRepository(IInventoryRepository[InventoryAggregate]):
     def __init__(self, session: AsyncSession):
         self.session = session
 
