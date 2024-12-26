@@ -9,5 +9,4 @@ class InventoryModel(SQLModel, table=True):
     quantity: int
     created_at: str = Field(default_factory=lambda: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     updated_at: Optional[str] = Field(default=None)
-    product_id: int = Field(foreign_key="productmodel.id")
-    product: ProductModel = Relationship(back_populates="inventario")
+    product_id: str = Field(default=None, foreign_key="productmodel.id")  

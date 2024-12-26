@@ -13,6 +13,7 @@ from app.users.infrastructure.model.ModelUser import User
 from app.inventory.infrastructure.model.inventoryModel import InventoryModel
 
 #Modelo de producto
+from app.products.infrastructure.repository.productModel import ProductModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
