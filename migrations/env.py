@@ -9,6 +9,11 @@ from sqlmodel import SQLModel # agregar
 ##Aqui agrego mis modeos
 from app.users.infrastructure.model.ModelUser import User
 
+#Modelo de inventario
+from app.inventory.infrastructure.model.inventoryModel import InventoryModel
+
+#Modelo de producto
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
