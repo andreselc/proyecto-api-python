@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.inventory.infrastructure.repository.inventoryRepository import InventoryRepository
 from app.inventory.application.dtos.createInventoryDto import CreateInventoryDto
 from app.inventory.application.dtos.updateInventoryDto import UpdateInventoryDto
-from app.inventory.application.dtos.inventoryDto import Inventory
 from app.inventory.application.services.createInventory import CreateInventoryService
 from app.inventory.application.services.updateInventory import UpdateInventoryService
 from app.inventory.application.services.getInventoryById import GetInventoryByIdService

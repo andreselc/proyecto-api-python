@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.products.infrastructure.controllers.productController import router as product_router  
 from app.users.infrastructure.controller.userController import router as user_router
 #importar inventario
+from app.inventory.infrastructure.controllers.inventoryController import router as inventory_router
 #importar carrito
 #modulo ordenes
 #modulo reporte
@@ -19,6 +20,7 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(product_router, prefix="/api")
+app.include_router(inventory_router)
 #modulo inventario
 #modulo carrito
 #modulo ordenes
