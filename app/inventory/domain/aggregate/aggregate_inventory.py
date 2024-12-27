@@ -11,11 +11,11 @@ class InventoryAggregate(Entity):
         self.product = product
 
     @classmethod
-    def create(cls, quantity: int, name: str, code: str, description: str, margin_profit: float, cost: float, status: str):
+    def create(cls, quantity: int, product_id: str,  name: str, code: str, description: str, margin_profit: float, cost: float, status: str):
         id = ID.create()
         inventory = Inventory.create(quantity)
         price = calculate_price(cost, margin_profit)
-        product = Product.create(name, code, description, price, margin_profit, cost, status)
+        product = Product.create(product_id, name, code, description, price, margin_profit, cost, status)
         return cls(id, inventory, product)
     
     def update(self, quantity: int = None, name: str = None, code: str = None, description: str = None, margin_profit: float = None, cost: float = None, status: str = None):

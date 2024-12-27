@@ -22,11 +22,11 @@ router = APIRouter(
 async def create_inventory(inventory_dto: CreateInventoryDto, session: AsyncSession = Depends(database.get_session)):
     repo = InventoryRepository(session) #repositorio para inventario
     inventory_service = CreateInventoryService(repo)
-    #repoP = ProductRepository(session) #repositorio para productos
-    #product_service = GetProductByIdService(repoP)
+    repoP = ProductRepository(session) #repositorio para productos
+    product_service = GetProductByIdService(repoP)
     try:
-        #product_aggregate = await product_service.get_product_by_id(inventory_dto.product_id)
-        inventory_aggregate = await inventory_service.create_inventory(inventory_dto)
+        product_aggregate = await product_service.get_product_by_id(inventory_dto.product_id)
+        inventory_aggregate = await inventory_service.create_inventory(inventory_dto, product_aggregate)
         inventory_dto = domain_to_dto(inventory_aggregate)
         return {"message": "Inventory assigned to product successfuly"}
     except ValueError as e:
