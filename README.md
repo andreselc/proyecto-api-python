@@ -74,11 +74,16 @@ En caso de que quiera crear alguna migracion por una modificacion, use el siguie
 docker-compose exec web alembic revision --autogenerate -m "Example model"
 ```
 Para aplicar las migraciones use alguno de los siguientes comandos
+Para correr todas las migraciones 
 ```bash
-docker-compose exec web alembic upgrade heads 
+docker-compose exec web alembic upgrade heads
+
+```
+Para correr la ultima o de un id en especifico 
+```bash
+docker-compose exec web alembic upgrade head
 docker-compose exec web alembic upgrade id_migracion
 ```
-
 ## Probar la Aplicación
 Una vez que los contenedores estén en funcionamiento, puedes probar la aplicación utilizando un navegador web o herramientas como `curl` o `Postman`, o directamente con `Swagger`, que viene integrado en la aplicación, este último lo revisas en la dirección:
 ```bash
