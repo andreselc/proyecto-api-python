@@ -1,6 +1,7 @@
 from app.inventory.domain.ports.IInventoryRepository import IInventoryRepository
 from app.inventory.application.dtos.createInventoryDto import CreateInventoryDto
 from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregate
+from app.products.domain.aggregate_root import ProductAggregate
 
 class CreateInventoryService:
     def __init__(self, repo: IInventoryRepository[InventoryAggregate]):
@@ -18,5 +19,5 @@ class CreateInventoryService:
             cost=inventory_dto.cost,
             status="active"
         )
-        await self.repo.create_inventory(inventory_aggregate)
+        await self.repo.create_inventory(inventory_aggregate, inventory_dto.product_id)
         return inventory_aggregate

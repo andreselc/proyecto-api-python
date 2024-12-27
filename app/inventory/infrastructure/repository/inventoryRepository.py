@@ -12,8 +12,8 @@ class InventoryRepository(IInventoryRepository[InventoryAggregate]):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_inventory(self, inventory_aggregate: InventoryAggregate) -> None:
-        inventory_model = aggregate_to_model(inventory_aggregate)
+    async def create_inventory(self, inventory_aggregate: InventoryAggregate, product_id: str, ) -> None:
+        inventory_model = aggregate_to_model(inventory_aggregate, product_id)
         self.session.add(inventory_model)
         await self.session.commit()
         await self.session.refresh(inventory_model)
@@ -27,7 +27,7 @@ class InventoryRepository(IInventoryRepository[InventoryAggregate]):
     async def get_inventory_by_id(self, inventory_id: str) -> InventoryAggregate:
         result = await self.session.execute(select(InventoryModel).where(InventoryModel.id == inventory_id))
         inventory_model = result.scalar_one_or_none()
-        if inventory_model:
+        if inventory_model: 
             result2 = await self.session.execute(select(ProductModel).where(ProductModel.id == inventory_model.product_id))
             product_model = result2.scalar_one_or_none()
             return model_to_domain(inventory_model, product_model)

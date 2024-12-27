@@ -12,13 +12,15 @@ from app.products.domain.value_objects.price import Price
 from app.products.domain.value_objects.margin_profit import MarginProfit
 from app.products.domain.value_objects.cost import Cost
 from app.products.domain.enums.status import Status
+from app.products.domain.entities.product import Product
+from app.inventory.domain.entities.inventory import Inventory
 
 def model_to_domain(inventory_model: InventoryModel, product_model: ProductModel) -> InventoryAggregate:
-    inventory = inventory_model(
+    inventory = Inventory(
         id = ID_INV(inventory_model.id),
         quantity = Quantity(inventory_model.quantity)
     )
-    product = product_model(
+    product = Product(
         id=ID_PRO(product_model.id),
         name=Name(product_model.name),
         code=Code(product_model.code),
