@@ -13,12 +13,12 @@ class UpdateInventoryService:
         
         inventory_aggregate.update(
             quantity=inventory_dto.quantity,
-            name=inventory_dto.name,
-            code=inventory_dto.code,
-            description=inventory_dto.description,
-            margin_profit=inventory_dto.profit_margin,
-            cost=inventory_dto.cost,
-            status=inventory_dto.status
+            name=inventory_aggregate.product.name.get(),
+            code=inventory_aggregate.product.code.get(),
+            description=inventory_aggregate.product.description.get(),
+            margin_profit=inventory_aggregate.product.margin_profit.get(),
+            cost=inventory_aggregate.product.cost.get(),
+            status=inventory_aggregate.product.status.value
         )
 
         await self.repo.update_inventory(inventory_aggregate)

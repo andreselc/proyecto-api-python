@@ -42,7 +42,7 @@ async def get_inventory_by_id(inventory_id: str, session: AsyncSession = Depends
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.patch("inventories/{inventory_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
+@router.patch("/inventories/{inventory_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
 async def update_inventory(inventory_id: str, inventory_dto: UpdateInventoryDto, session: AsyncSession = Depends(database.get_session)):
     repo = InventoryRepository(session)
     inventory_service = UpdateInventoryService(repo)
