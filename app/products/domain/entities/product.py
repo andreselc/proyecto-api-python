@@ -20,8 +20,8 @@ class Product(Entity):
         self.status = status
 
     @classmethod
-    def create(cls, name: str, code: str, description: str, price: float, margin_profit: float, cost: float, status: str):
-        id = ID.create()
+    def create(cls, id: str, name: str, code: str, description: str, price: float, margin_profit: float, cost: float, status: str):
+        id = ID.create(id)
         name = Name.create(name)
         code = Code.create(code)
         description = Description.create(description)

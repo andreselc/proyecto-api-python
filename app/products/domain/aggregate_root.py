@@ -9,10 +9,9 @@ class ProductAggregate(Entity):
         self.product = product
 
     @classmethod
-    def create(cls, name: str, code: str, description: str, margin_profit: float, cost: float, status: str):
-        id = ID.create()
+    def create(cls, id: str, name: str, code: str, description: str, margin_profit: float, cost: float, status: str):
         price = calculate_price(cost, margin_profit)
-        product = Product.create(name, code, description, price, margin_profit, cost, status)
+        product = Product.create(id, name, code, description, price, margin_profit, cost, status)
         return cls(id, product)
 
     def update(self, name: str = None, code: str = None, description: str = None, margin_profit: float = None, cost: float = None, status: str = None):

@@ -1,6 +1,7 @@
 from app.products.domain.ports.IProductRepository import IProductRepository
 from app.products.application.dtos.createProductDto import CreateProductDto
 from app.products.domain.aggregate_root import ProductAggregate
+from uuid import uuid4
 
 class CreateProductService:
     def __init__(self, repo: IProductRepository[ProductAggregate]):
@@ -14,6 +15,7 @@ class CreateProductService:
                 raise ValueError(f"Product with code {product_dto.code} already exists")
 
         product_aggregate = ProductAggregate.create(
+            id=str(uuid4()),
             name=product_dto.name,
             code=product_dto.code,
             description=product_dto.description,
