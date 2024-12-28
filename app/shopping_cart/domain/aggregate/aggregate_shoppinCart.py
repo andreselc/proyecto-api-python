@@ -6,11 +6,11 @@ from app.users.domain.entities.user import User
 from app.products.domain.services.calculate_price import calculate_price
 
 class ShoppinCartAggregate(Entity):
-    def __init__(self, id: ID, shoppin_cart: ShoppinCart):
+    def __init__(self, id: ID, shoppin_cart: ShoppinCart, product: Product, user: User):
         self.id = id
         self.shoppin_cart = shoppin_cart
-        self.products = Product
-        self.user = User
+        self.product = product
+        self.user = user
 
     @classmethod
     def create(cls, quantity: int, product_id: str, name: str, code: str, description: str, margin_profit: float, cost: float, status: str, user_name: str, username: str, email: str, password: str, role: str):
@@ -26,4 +26,4 @@ class ShoppinCartAggregate(Entity):
             self.shoppin_cart.update(quantity)
 
     def get(self):
-        return self.shoppin_cart, self.products, self.user
+        return self.shoppin_cart, self.product, self.user
