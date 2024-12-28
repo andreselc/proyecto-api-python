@@ -64,7 +64,6 @@ async def db_session():
             session = async_session(bind=connection)
             yield session
             await session.close()
-            await transaction.rollback()
     
 
 # Fixture para crear un cliente de prueba
@@ -76,11 +75,19 @@ def test_client(db_session):
         try:
             yield db_session
         finally:
-            await db_session.close()
+            await db_session.aclose()
 
     app.dependency_overrides[get_session] = override_get_db
     client = TestClient(app)
     yield client
 
-
+@pytest.fixture
+def user_payload():
+    return {
+        "name": "John",
+        "email": "john.doe@example.com",
+        "username": "johndoe",
+        "password": "password",
+        "role": "manager"
+    }
 
