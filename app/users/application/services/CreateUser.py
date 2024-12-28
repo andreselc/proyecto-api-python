@@ -1,6 +1,7 @@
 from app.users.domain.port.IUserRepository import IUserRepository 
 from app.users.application.dtos.CreateUserDto import CreateUserDto
 from app.users.domain.aggregate.aggregate_user import AggregateUser
+from uuid import uuid4
 
 class CreateUser:
     def __init__(self, repo: IUserRepository[AggregateUser]):
@@ -21,6 +22,7 @@ class CreateUser:
 
       
         user = AggregateUser.create(
+            id= str(uuid4()),
             name = user_dto.name,
             email= user_dto.email,
             username= user_dto.username,

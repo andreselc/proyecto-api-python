@@ -1,6 +1,6 @@
 from app.users.domain.port.IUserRepository import IUserRepository 
 from app.users.domain.aggregate.aggregate_user import AggregateUser
-
+from uuid import uuid4
 
 class CreateSuperAdmin:
     def __init__(self, repo: IUserRepository[AggregateUser]):
@@ -13,6 +13,7 @@ class CreateSuperAdmin:
             return False
         
         user = AggregateUser.create(
+            id= str(uuid4()),
             name = "Daniel",
             email= "ecommerce_superadmin@gmail.com",
             username= "superadmin",

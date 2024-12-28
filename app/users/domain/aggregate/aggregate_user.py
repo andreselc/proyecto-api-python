@@ -11,9 +11,8 @@ class AggregateUser(Entity):
         return self.user
 
     @classmethod
-    def create(cls, name: str, username: str, email: str, password: str, role: str):
-        id = Id.create()
-        user = User.create(name, username, email, password, role)
+    def create(cls, id: str, name: str, username: str, email: str, password: str, role: str):
+        user = User.create(id, name, username, email, password, role)
         return cls(id,user)
 
     def update(self, username: str = None, email: str= None, password: str =None, name: str = None):
