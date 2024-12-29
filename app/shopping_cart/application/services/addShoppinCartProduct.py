@@ -9,6 +9,7 @@ class AddShoppinCartProductService:
         self.repo = repo
 
     async def add_shoppin_cart_product(self, shoppin_cart_dto: AddShoppiCartDto, product_aggregate: ProductAggregate, user_aggregate: AggregateUser) -> ShoppinCartAggregate:
+        #falta extraer el ID del inventario a traves del ID del producto
 
         shoppin_cart_aggregate = ShoppinCartAggregate.create(
             quantity=shoppin_cart_dto.quantity,
