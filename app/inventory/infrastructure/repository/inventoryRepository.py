@@ -32,6 +32,15 @@ class InventoryRepository(IInventoryRepository[InventoryAggregate]):
             product_model = result2.scalar_one_or_none()
             return model_to_domain(inventory_model, product_model)
         return None
+    
+    async def get_inventory_by_product_id(self, product_id):
+        result = await self.session.execute(select(InventoryModel).where(InventoryModel.product_id == product_id))
+        inventory_model = result.scalar_one_or_none()
+        if inventory_model:
+            result2 = await self.session.execute(select(ProductModel).where(ProductModel.id == inventory_model.product_id))
+            product_model = result2.scalar_one_or_none()
+            return model_to_domain(inventory_model, product_model)
+        return None
 
 
 
