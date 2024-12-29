@@ -27,7 +27,7 @@ router = APIRouter(
     tags=["Shopping Cart"]
 )
 
-@router.post("shopping_cart", status_code=status.HTTP_201_CREATED)
+@router.post("/shopping_cart", status_code=status.HTTP_201_CREATED)
 async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = AddShoppinCartProductService(repo)
