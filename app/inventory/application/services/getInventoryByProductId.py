@@ -1,7 +1,7 @@
 from app.inventory.domain.ports.IInventoryRepository import IInventoryRepository
 from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregate
 
-class GetInventoryByProductId:
+class GetInventoryByProductIdService:
     def __init__(self, repo: IInventoryRepository[InventoryAggregate]):
         self.repo = repo
 

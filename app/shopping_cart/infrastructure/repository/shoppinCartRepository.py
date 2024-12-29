@@ -2,6 +2,8 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.shopping_cart.infrastructure.model.shoppinCartModel import ShoppinCartModel
+from app.products.infrastructure.repository.productModel import ProductModel
+from app.users.infrastructure.model.ModelUser import User
 from app.shopping_cart.domain.ports.IShoppinCartRepository import IShoppinCartRepository
 from app.shopping_cart.domain.aggregate.aggregate_shoppinCart import ShoppinCartAggregate
 from app.shopping_cart.infrastructure.mappers.aggregate_to_model import aggregate_to_model
@@ -32,13 +34,17 @@ class ShoppingCartRepository(IShoppinCartRepository[ShoppinCartAggregate]):
             await self.session.delete(shoppin_cart_model)
             await self.session.commit()
 
-    async def get_shoppin_cart_product_by_id(self, inventory_id: str, user_id: str):
+    async def get_shoppin_cart_product_by_id(self, inventory_id: str, user_id: str, product_id: str):
         result = await self.session.execute(
             select(ShoppinCartModel).where((ShoppinCartModel.inventory_id == inventory_id) & (ShoppinCartModel.user_id == user_id))
             )
         shoppin_cart_model = result.scalar_one_or_none()
         if shoppin_cart_model:
-            return model_to_domain(shoppin_cart_model)
+            result2 = await self.session.execute(select(ProductModel).where(ProductModel.id == product_id))
+            product_model = result2.scalar_one_or_none()
+            result3 = await self.session.execute(select(User).where(User.id == user_id))
+            user_model = result3.scalar_one_or_none()
+            return model_to_domain(shoppin_cart_model, product_model, user_model)
         return None
     
     async def get_shoppin_cart_products(self, user_id: str):

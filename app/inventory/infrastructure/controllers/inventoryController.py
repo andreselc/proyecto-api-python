@@ -6,7 +6,7 @@ from app.inventory.application.dtos.updateInventoryDto import UpdateInventoryDto
 from app.inventory.application.services.createInventory import CreateInventoryService
 from app.inventory.application.services.updateInventory import UpdateInventoryService
 from app.inventory.application.services.getInventoryById import GetInventoryByIdService
-from app.inventory.application.services.getInventoryByProductId import GetInventoryByProductId
+from app.inventory.application.services.getInventoryByProductId import GetInventoryByProductIdService
 
 from app.products.application.services.getProductById import GetProductByIdService
 from app.products.infrastructure.repository.productRepository import ProductRepository
@@ -46,7 +46,7 @@ async def get_inventory_by_id(inventory_id: str, session: AsyncSession = Depends
 @router.get("/inventories/product/{product_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
 async def get_inventory_by_product_id(product_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = InventoryRepository(session)
-    inventory_service = GetInventoryByProductId(repo)
+    inventory_service = GetInventoryByProductIdService(repo)
     try:
         inventory_aggregate = await inventory_service.get_inventory_by_product_id(product_id)
         return domain_to_dto(inventory_aggregate)

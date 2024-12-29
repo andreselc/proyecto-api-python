@@ -22,5 +22,5 @@ class IShoppinCartRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def get_shoppin_cart_product_by_id(self, shoppin_cart_id: str) -> T:
+    async def get_shoppin_cart_product_by_id(self, inventory_id: str, user_id: str, product_id: str) -> T:
         pass
