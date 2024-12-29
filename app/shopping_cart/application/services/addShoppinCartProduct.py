@@ -3,13 +3,14 @@ from app.shopping_cart.application.dtos.addShoppingCartDto import AddShoppiCartD
 from app.shopping_cart.domain.aggregate.aggregate_shoppinCart import ShoppinCartAggregate
 from app.products.domain.aggregate_root import ProductAggregate
 from app.users.domain.aggregate.aggregate_user import AggregateUser
+from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregate
 from uuid import uuid4
 
 class AddShoppinCartProductService:
     def __init__(self, repo: IShoppinCartRepository[ShoppinCartAggregate]):
         self.repo = repo
 
-    async def add_shoppin_cart_product(self, shoppin_cart_dto: AddShoppiCartDto, product_aggregate: ProductAggregate, user_aggregate: AggregateUser, inventory_id: str) -> ShoppinCartAggregate:
+    async def add_shoppin_cart_product(self, shoppin_cart_dto: AddShoppiCartDto, product_aggregate: ProductAggregate, user_aggregate: AggregateUser, inventory_aggregate: InventoryAggregate) -> ShoppinCartAggregate:
         #Verificacion de si existe un carrito previo 
         existing_shoppin_carts = await self.repo.get_shoppin_cart_products(user_aggregate.user.id.get())
         shoppin_cart: str = ""
@@ -35,8 +36,9 @@ class AddShoppinCartProductService:
             username=user_aggregate.user.username.get(),
             email=user_aggregate.user.email.get(),
             password=user_aggregate.user.password.get(),
-            role=user_aggregate.user.role.value
+            role=user_aggregate.user.role.value,
+            inventory_quantity=inventory_aggregate.inventory.quantity.get()
         )
 
-        await self.repo.add_shoppin_cart_product(shoppin_cart_aggregate, inventory_id)
+        await self.repo.add_shoppin_cart_product(shoppin_cart_aggregate, inventory_aggregate.inventory.id.get())
         return shoppin_cart_aggregate

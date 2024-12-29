@@ -41,7 +41,7 @@ async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_
         product_aggregate = await product_service.get_product_by_id(shoppin_cart_dto.product_id)
         inventory_aggregate = await inventory_service.get_inventory_by_product_id(shoppin_cart_dto.product_id)
         user_aggregate = await user_service.get_user_by_id(current_user.id, False)
-        shoppin_cart_service = await shoppin_cart_service.add_shoppin_cart_product(shoppin_cart_dto, product_aggregate, user_aggregate, inventory_aggregate.inventory.id.get())
+        shoppin_cart_service = await shoppin_cart_service.add_shoppin_cart_product(shoppin_cart_dto, product_aggregate, user_aggregate, inventory_aggregate)
         return {"message": "Product added to shopping cart successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

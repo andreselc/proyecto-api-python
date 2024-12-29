@@ -7,6 +7,7 @@ def domain_to_dto(shoppin_cart_aggregate: ShoppinCartAggregate) -> ShoppinCartDt
         user_name=user.name.get(),
         shoppin_cart_id=shoppin_cart.id.get(),
         quantity=shoppin_cart.quantity.get(),
+        product_id=product.id.get(),
         product_name=product.name.get(),
         product_code=product.code.get(),
         product_price=product.price.get(),
