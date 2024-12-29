@@ -65,7 +65,17 @@ async def delete_user(user_id:str,session: AsyncSession = Depends(get_session)):
         return {"message": "User deleted successfully"}
       
 
-@router.patch("/users/{user_id}",status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["superadmin"]))]) 
+@router.patch("/users/{user_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["superadmin"]))], description="""
+Fill in the fields you want to update. Leave the fields you don't want to change empty.
+
+Example request body:
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "username": "johndoe",
+    "password": ""
+}
+""")
 async def update_user(user_id:str, user_update: UpdateUserDto,session: AsyncSession = Depends(get_session)):
     pass
     repo = UserRepository(session)
@@ -77,6 +87,6 @@ async def update_user(user_id:str, user_update: UpdateUserDto,session: AsyncSess
     except ValueError as e:
          raise HTTPException(status_code=400, detail=str(e))   
 
-@router.get("/users/me") 
+@router.get("/users/get/me") 
 async def get_me_user(current_user: Annotated[User, Depends(get_current_user)]):
     return current_user

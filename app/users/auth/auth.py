@@ -5,8 +5,8 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
-from app.users.domain.aggregate.aggregate_user import AggregateUser
-
+from app.users.application.dtos.UserDto import UserDto
+from app.users.infrastructure.mappers.model_to_dto import model_to_dto
 
 from app.users.infrastructure.db.database import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -28,7 +28,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: AsyncSession = Depends(get_session)) -> AggregateUser:
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: AsyncSession = Depends(get_session)) -> UserDto:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -47,5 +47,5 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], sessio
     user = await repo.IsExistUserName(token_data)
     if user is None:
         raise credentials_exception
-    return user
+    return model_to_dto(user)
 

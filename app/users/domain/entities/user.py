@@ -20,8 +20,8 @@ class User(Entity):
         return self
 
     @classmethod
-    def create(cls, name: str, username: str, email: str, password: str, role: str):
-        id = Id.create()
+    def create(cls, id:str, name: str, username: str, email: str, password: str, role: str):
+        id = Id.create(id)
         name = Name.create(name)
         username = Username.create(username)
         email = Email.create(email)
