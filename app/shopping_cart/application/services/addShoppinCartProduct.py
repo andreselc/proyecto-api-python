@@ -20,6 +20,7 @@ class AddShoppinCartProductService:
             margin_profit=product_aggregate.product.margin_profit.get(),
             cost=product_aggregate.product.cost.get(),
             status=product_aggregate.product.status.value,
+            user_id=user_aggregate.user.id.get(),
             user_name=user_aggregate.user.name.get(),
             username=user_aggregate.user.username.get(),
             email=user_aggregate.user.email.get(),
