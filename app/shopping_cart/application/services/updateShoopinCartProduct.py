@@ -15,5 +15,5 @@ class updateShoppinCartProductService:
             quantity=shoppin_cart_dto.quantity
         )
 
-        await self.repo.update_shoppin_cart_product(shoppin_cart_aggregate)
+        await self.repo.update_shoppin_cart_product(shoppin_cart_aggregate, inventory_id)
         return True
