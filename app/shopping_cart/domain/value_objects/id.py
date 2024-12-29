@@ -1,4 +1,3 @@
-from uuid import uuid4
 from app.common.domain.value_object import ValueObject
 
 class ID(ValueObject):
@@ -6,8 +5,8 @@ class ID(ValueObject):
         self._id = id
 
     @classmethod
-    def create(cls):
-        return cls(str(uuid4()))
+    def create(cls, id: str):
+        return cls(id)
     
     def get(self) -> str:
         return self._id
