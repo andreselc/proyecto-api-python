@@ -12,16 +12,16 @@ class LoginUser:
         self.repo = repo
 
     async def loginuser(self, user_dto: LoginUserDto) -> LoginRespuestaUserDto:
-        user_aggregate = await self.repo.IsExistUserName(user_dto.username)
+        user_model_dto = await self.repo.IsExistUserName(user_dto.username)
         # Verificar si el usuario de ese superadmin
-        if user_aggregate is None:
+        if user_model_dto is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found"
             )
 
-        hash_password = user_aggregate.user.password.get()
-        username = user_aggregate.user.username.get()
+        hash_password = user_model_dto.password
+        username = user_model_dto.username
         # Verificar si la contraseña es correcta
         if not verify_password(user_dto.password, hash_password ):
            raise HTTPException(

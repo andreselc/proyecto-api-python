@@ -22,13 +22,13 @@ class UserRepository(IUserRepository[User]):
             await self.session.commit()
             await self.session.refresh(user_model)
          
-    async def IsExistUserName(self, user_name: str) -> AggregateUser:
+    async def IsExistUserName(self, user_name: str) -> User:
         if self.session is not None:
             result = await self.session.exec(select(User).where(User.username == user_name))
             user = result.scalars().first()
             if user is None:
                 return None
-            return model_to_Aggregate(user) #retorna el user 
+            return user #retorna el user 
    
     async def IsExistEmail(self, email_user: str) -> AggregateUser:
         if self.session is not None:
@@ -36,7 +36,7 @@ class UserRepository(IUserRepository[User]):
             user = result.scalars().first()
             if user is None:
                 return None
-            return model_to_Aggregate(user) #retorna el user 
+            return model_to_dto(user) #retorna el user 
 
     async def get_users(self, role: str) -> List[UserDto]:  
         if self.session is not None:
