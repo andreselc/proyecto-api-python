@@ -7,7 +7,7 @@ class ID(ValueObject):
 
     @classmethod
     def create(cls):
-        return cls(str(uuid4))
+        return cls(str(uuid4()))
     
     def get(self) -> str:
         return self._id

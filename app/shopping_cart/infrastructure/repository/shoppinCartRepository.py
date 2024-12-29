@@ -11,8 +11,8 @@ class ShoppingCartRepository(IShoppinCartRepository[ShoppinCartAggregate]):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def add_shoppin_cart_product(self, shoppin_cart_aggregate: ShoppinCartAggregate) -> None:
-        shoppin_cart_model = aggregate_to_model(shoppin_cart_aggregate)
+    async def add_shoppin_cart_product(self, shoppin_cart_aggregate: ShoppinCartAggregate, inventory_id: str) -> None:
+        shoppin_cart_model = aggregate_to_model(shoppin_cart_aggregate, inventory_id)
         self.session.add(shoppin_cart_model)
         await self.session.commit()
         await self.session.refresh(shoppin_cart_model)

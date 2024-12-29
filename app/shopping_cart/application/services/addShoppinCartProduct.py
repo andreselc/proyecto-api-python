@@ -8,7 +8,7 @@ class AddShoppinCartProductService:
     def __init__(self, repo: IShoppinCartRepository[ShoppinCartAggregate]):
         self.repo = repo
 
-    async def add_shoppin_cart_product(self, shoppin_cart_dto: AddShoppiCartDto, product_aggregate: ProductAggregate, user_aggregate: AggregateUser) -> ShoppinCartAggregate:
+    async def add_shoppin_cart_product(self, shoppin_cart_dto: AddShoppiCartDto, product_aggregate: ProductAggregate, user_aggregate: AggregateUser, inventory_id: str) -> ShoppinCartAggregate:
         #falta extraer el ID del inventario a traves del ID del producto
 
         shoppin_cart_aggregate = ShoppinCartAggregate.create(
@@ -28,5 +28,5 @@ class AddShoppinCartProductService:
             role=user_aggregate.user.role.value
         )
 
-        await self.repo.add_shoppin_cart_product(shoppin_cart_aggregate)
+        await self.repo.add_shoppin_cart_product(shoppin_cart_aggregate, inventory_id)
         return shoppin_cart_aggregate

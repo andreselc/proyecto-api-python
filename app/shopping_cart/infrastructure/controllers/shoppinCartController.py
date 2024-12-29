@@ -35,10 +35,14 @@ async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_
     product_service = GetProductByIdService(repoP)
     repoU = UserRepository(session) #repositorio para usuario
     user_service = GetUserById(repoU)
+    repoI = InventoryRepository(session) #repositorio para inventario
+    inventory_service = GetInventoryByProductIdService(repoI)
     try:
         product_aggregate = await product_service.get_product_by_id(shoppin_cart_dto.product_id)
-        user_aggregate = await user_service.get_user_by_id(current_user.id)
-        shoppin_cart_service = await shoppin_cart_service.add_shoppin_cart_product(shoppin_cart_dto, product_aggregate, user_aggregate)
+        inventory_aggregate = await inventory_service.get_inventory_by_product_id(shoppin_cart_dto.product_id)
+        user_aggregate = await user_service.get_user_by_id(current_user.id, False)
+        shoppin_cart_service = await shoppin_cart_service.add_shoppin_cart_product(shoppin_cart_dto, product_aggregate, user_aggregate, inventory_aggregate.inventory.id.get())
+        return {"message": "Product added to shopping cart successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
@@ -63,7 +67,7 @@ async def get_product_in_shopping_cart_by_id(product_id: str, current_user: Anno
     try:
         inventory_aggregate = await inventory_service.get_inventory_by_product_id(product_id)
         shoppin_cart_aggregate = await shoppin_cart_service.get_shoppin_cart_product_by_id(inventory_aggregate.inventory.id.get(), current_user.id, product_id)
-        return domain_to_dto(shoppin_cart_aggregate, inventory_aggregate)
+        return domain_to_dto(shoppin_cart_aggregate)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
