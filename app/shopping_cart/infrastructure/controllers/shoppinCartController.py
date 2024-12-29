@@ -21,7 +21,7 @@ from app.inventory.infrastructure.repository.inventoryRepository import Inventor
 from app.shopping_cart.infrastructure.db import database
 from app.shopping_cart.infrastructure.mappers.domain_to_dto import domain_to_dto
 from app.users.auth.auth import get_current_user
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 
 router = APIRouter(
     tags=["Shopping Cart"]

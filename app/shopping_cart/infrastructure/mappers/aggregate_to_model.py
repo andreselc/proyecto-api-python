@@ -1,4 +1,4 @@
-from app.shopping_cart.infrastructure.model.shoppinCartModel import ShoppinCartModel
+from app.common.infrastructure.Modelo import ShoppinCartModel
 from app.shopping_cart.domain.aggregate.aggregate_shoppinCart import ShoppinCartAggregate
 
 def aggregate_to_model(shoppin_cart: ShoppinCartAggregate, inventory_id: str) -> ShoppinCartAggregate:

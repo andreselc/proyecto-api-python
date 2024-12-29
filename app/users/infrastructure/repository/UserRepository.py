@@ -7,7 +7,7 @@ from app.users.domain.aggregate.aggregate_user import AggregateUser
 from app.users.infrastructure.mappers.aggregate_to_model import Aggregate_to_model
 from app.users.infrastructure.mappers.model_to_dto import model_to_dto
 from app.users.infrastructure.mappers.model_to_domain import model_to_Aggregate
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.application.dtos.UserDto import UserDto
 from fastapi import HTTPException, status
 

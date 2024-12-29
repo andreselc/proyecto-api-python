@@ -1,5 +1,4 @@
-from app.inventory.infrastructure.model.inventoryModel import InventoryModel
-from app.products.infrastructure.repository.productModel import ProductModel
+from app.common.infrastructure.Modelo import InventoryModel, ProductModel
 from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregate
 from app.inventory.domain.entities.inventory import Inventory
 from app.inventory.domain.value_objects.id import ID as ID_INV

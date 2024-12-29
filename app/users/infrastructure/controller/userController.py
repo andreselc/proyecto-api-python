@@ -10,7 +10,7 @@ from app.users.application.services.DeleteUser import DeleteUser as DeleteUserSe
 from app.users.application.services.UpdateUser import UpdateUser as UpdateUserService
 from app.users.application.dtos.CreateUserDto import CreateUserDto
 from app.users.application.dtos.UpdateUserDto import UpdateUserDto
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.infrastructure.repository.UserRepository import UserRepository
 
 from app.users.auth.auth import get_current_user

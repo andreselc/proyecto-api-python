@@ -1,9 +1,7 @@
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.shopping_cart.infrastructure.model.shoppinCartModel import ShoppinCartModel
-from app.products.infrastructure.repository.productModel import ProductModel
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import ShoppinCartModel, User, ProductModel
 from app.shopping_cart.domain.ports.IShoppinCartRepository import IShoppinCartRepository
 from app.shopping_cart.domain.aggregate.aggregate_shoppinCart import ShoppinCartAggregate
 from app.shopping_cart.infrastructure.mappers.aggregate_to_model import aggregate_to_model

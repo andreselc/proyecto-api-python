@@ -1,7 +1,7 @@
 #auth.py  
 from typing import Annotated  
 from fastapi import Depends, HTTPException, status  
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.auth.auth import get_current_user
   
 class RoleChecker:  

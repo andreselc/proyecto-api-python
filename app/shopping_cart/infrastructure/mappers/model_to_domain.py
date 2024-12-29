@@ -20,10 +20,7 @@ from app.shopping_cart.domain.entities.shoppinCart import ShoppinCart
 from app.shopping_cart.domain.value_objects.id import ID as ID_SHO
 from app.shopping_cart.domain.value_objects.quantity import Quantity
 
-from app.products.infrastructure.repository.productModel import ProductModel
-from app.shopping_cart.infrastructure.model.shoppinCartModel import ShoppinCartModel
-from app.users.infrastructure.model.ModelUser import User
-
+from app.common.infrastructure.Modelo import ShoppinCartModel, ProductModel, User
 from app.shopping_cart.domain.aggregate.aggregate_shoppinCart import ShoppinCartAggregate
 
 def model_to_domain(shoppin_cart_model: ShoppinCartModel, product_model: ProductModel, user_model: User) -> ShoppinCartAggregate:

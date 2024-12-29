@@ -1,4 +1,4 @@
-from app.inventory.infrastructure.model.inventoryModel import InventoryModel
+from app.common.infrastructure.Modelo import InventoryModel
 from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregate
 from datetime import datetime, timezone
 

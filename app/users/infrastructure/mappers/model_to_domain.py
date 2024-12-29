@@ -1,5 +1,5 @@
 from app.users.domain.aggregate.aggregate_user import AggregateUser
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.domain.entities.user import User
 from app.users.domain.value_object.email import Email
 from app.users.domain.value_object.id import Id

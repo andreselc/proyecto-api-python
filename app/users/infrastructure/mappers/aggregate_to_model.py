@@ -1,5 +1,5 @@
 from app.users.domain.aggregate.aggregate_user import AggregateUser
-from app.users.infrastructure.model.ModelUser import User as ModelUser
+from app.common.infrastructure.Modelo import User as ModelUser
 from datetime import datetime
 
 def Aggregate_to_model(user_aggregate: AggregateUser) -> ModelUser:

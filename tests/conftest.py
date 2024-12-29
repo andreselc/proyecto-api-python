@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from fastapi.testclient import TestClient
 from app.main import app
 from app.users.infrastructure.db.database import get_session
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.auth.utils import get_password_hash
 
 # Importar la función get_session de la aplicación

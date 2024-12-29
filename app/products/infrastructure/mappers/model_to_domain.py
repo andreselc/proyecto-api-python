@@ -1,4 +1,4 @@
-from app.products.infrastructure.repository.productModel import ProductModel
+from app.common.infrastructure.Modelo import ProductModel
 from app.products.domain.aggregate_root import ProductAggregate
 from app.products.domain.entities.product import Product
 from app.products.domain.value_objects.id import ID

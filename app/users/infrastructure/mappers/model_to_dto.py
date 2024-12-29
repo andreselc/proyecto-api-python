@@ -1,4 +1,4 @@
-from app.users.infrastructure.model.ModelUser import User
+from app.common.infrastructure.Modelo import User
 from app.users.application.dtos.UserDto import UserDto
 
 def model_to_dto(user: User) -> UserDto:
