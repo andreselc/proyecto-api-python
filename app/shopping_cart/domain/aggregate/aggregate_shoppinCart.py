@@ -13,12 +13,12 @@ class ShoppinCartAggregate(Entity):
         self.user = user
 
     @classmethod
-    def create(cls, quantity: int, product_id: str, name: str, code: str, description: str, margin_profit: float, cost: float, status: str, user_name: str, username: str, email: str, password: str, role: str):
+    def create(cls, quantity: int, product_id: str, name: str, code: str, description: str, margin_profit: float, cost: float, status: str, user_id: str ,user_name: str, username: str, email: str, password: str, role: str):
         id = ID.create()
         shoppin_cart = ShoppinCart.create(quantity)
         price = calculate_price(cost, margin_profit)
         product = Product.create(product_id, name, code, description, price, margin_profit, cost, status)
-        user = User.create(user_name, username, email, password, role)
+        user = User.create(user_id, user_name, username, email, password, role)
         return cls(id, shoppin_cart, product, user)
     
     def update(self, quantity: int = None):
