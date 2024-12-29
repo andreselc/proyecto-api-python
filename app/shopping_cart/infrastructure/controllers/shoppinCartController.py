@@ -44,6 +44,7 @@ async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_
     
 @router.get("/shopping_cart/all", status_code=status.HTTP_200_OK)
 async def list_products_in_shopping_cart(current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
+    #falta arreglar esto en el domain_to_dto
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = GetShoppinCartProducts(repo)
     try:
@@ -66,7 +67,7 @@ async def get_product_in_shopping_cart_by_id(product_id: str, current_user: Anno
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.patch("/shopping_cart/delete/{product_id}", status_code=status.HTTP_200_OK)
+@router.delete("/shopping_cart/delete/{product_id}", status_code=status.HTTP_200_OK)
 async def delete_product_in_shopping_cart(product_id: str, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = DeleteShoppinCartProductService(repo)
@@ -76,6 +77,19 @@ async def delete_product_in_shopping_cart(product_id: str, current_user: Annotat
         inventory_aggregate = await inventory_service.get_inventory_by_product_id(product_id)
         await shoppin_cart_service.delete_shoppin_cart_product(inventory_aggregate.inventory.id.get(), current_user.id, product_id)
         return {"message": "Product deleted from shopping cart successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+@router.patch("/shopping_cart/update/{product_id}", status_code=status.HTTP_200_OK)
+async def update_product_in_shopping_cart(product_id: str, shoppin_cart_dto: UpdateInventoryDto, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
+    repo = ShoppingCartRepository(session)
+    shoppin_cart_service = updateShoppinCartProductService(repo)
+    repoI = InventoryRepository(session)
+    inventory_service = GetInventoryByProductIdService(repoI)
+    try:
+        inventory_aggregate = await inventory_service.get_inventory_by_product_id(product_id)
+        await shoppin_cart_service.update_shoppin_cart_product(inventory_aggregate.inventory.id.get(), current_user.id, product_id, shoppin_cart_dto)
+        return {"message": "Product updated in shopping cart successfully"}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
