@@ -50,7 +50,7 @@ async def get_user_by_id(user_id:str,session: AsyncSession = Depends(get_session
     repo = UserRepository(session)
     user_service =GetUserByIdService(repo)
     try:
-        respuesta = await user_service.get_user_by_id(user_id)
+        respuesta = await user_service.get_user_by_id(user_id, True)
         return respuesta
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))    
