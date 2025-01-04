@@ -22,12 +22,13 @@ from app.shopping_cart.infrastructure.db import database
 from app.shopping_cart.infrastructure.mappers.domain_to_dto import domain_to_dto
 from app.users.auth.auth import get_current_user
 from app.common.infrastructure.Modelo import User
+from app.users.auth.Role_Checker import RoleChecker
 
 router = APIRouter(
     tags=["Shopping Cart"]
 )
 
-@router.post("/shopping_cart", status_code=status.HTTP_201_CREATED)
+@router.post("/shopping_cart", status_code=status.HTTP_201_CREATED, dependencies=[Depends(RoleChecker(["customer"]))])
 async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = AddShoppinCartProductService(repo)
@@ -46,7 +47,7 @@ async def add_shopping_cart_product(shoppin_cart_dto: AddShoppiCartDto, current_
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@router.get("/shopping_cart/all", status_code=status.HTTP_200_OK)
+@router.get("/shopping_cart/all", status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["customer"]))])
 async def list_products_in_shopping_cart(current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     #falta arreglar esto en el domain_to_dto
     repo = ShoppingCartRepository(session)
@@ -58,7 +59,7 @@ async def list_products_in_shopping_cart(current_user: Annotated[User, Depends(g
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.get("/shopping_cart/{product_id}", status_code=status.HTTP_200_OK)
+@router.get("/shopping_cart/{product_id}", status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["customer"]))])
 async def get_product_in_shopping_cart_by_id(product_id: str, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = GetShoppinCartProductById(repo)
@@ -71,7 +72,7 @@ async def get_product_in_shopping_cart_by_id(product_id: str, current_user: Anno
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.delete("/shopping_cart/delete/{product_id}", status_code=status.HTTP_200_OK)
+@router.delete("/shopping_cart/delete/{product_id}", status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["customer"]))])
 async def delete_product_in_shopping_cart(product_id: str, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = DeleteShoppinCartProductService(repo)
@@ -84,7 +85,7 @@ async def delete_product_in_shopping_cart(product_id: str, current_user: Annotat
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.patch("/shopping_cart/update/{product_id}", status_code=status.HTTP_200_OK)
+@router.patch("/shopping_cart/update/{product_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["customer"]))])
 async def update_product_in_shopping_cart(product_id: str, shoppin_cart_dto: UpdateInventoryDto, current_user: Annotated[User, Depends(get_current_user)], session: AsyncSession = Depends(database.get_session)):
     repo = ShoppingCartRepository(session)
     shoppin_cart_service = updateShoppinCartProductService(repo)
