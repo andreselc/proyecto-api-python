@@ -8,8 +8,7 @@ class CreateInventoryService:
         self.repo = repo
 
     async def create_inventory(self, inventory_dto: CreateInventoryDto, product_aggregate: ProductAggregate) -> InventoryAggregate:
-        #verificar si ya el producto por su codigo ya se encuentra asociado a un inventario
-        #esta pendiente!
+        
         inventory_aggregate = InventoryAggregate.create(
             quantity=inventory_dto.quantity,
             product_id=inventory_dto.product_id,
@@ -20,5 +19,5 @@ class CreateInventoryService:
             cost=product_aggregate.product.cost.get(),
             status="active"
         )
-        await self.repo.create_inventory(inventory_aggregate, inventory_dto.product_id)
+        await self.repo.create_inventory(inventory_aggregate)
         return inventory_aggregate

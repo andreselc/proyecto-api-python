@@ -88,7 +88,7 @@ PORT: 5432
 Una vez este el docker levantado, desde el contenedor web se ejecutará el siguiente comando para ver el funcionamiento de la pruebas.
 
 ```bash
-docker-compose exec web pytest -v
+    docker-compose exec web pytest -v
 ```
 
 ## Para correr las migraciones
