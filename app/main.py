@@ -5,6 +5,7 @@ from app.users.infrastructure.controller.userController import router as user_ro
 #importar inventario
 from app.inventory.infrastructure.controllers.inventoryController import router as inventory_router
 from app.shopping_cart.infrastructure.controllers.shoppinCartController import router as shopping_cart_router
+from app.orders.infrastructure.controller.orderController import router as orders_router
 #importar carrito
 #modulo ordenes
 #modulo reporte
@@ -23,6 +24,7 @@ app.include_router(user_router)
 app.include_router(product_router, prefix="/api")
 app.include_router(inventory_router)
 app.include_router(shopping_cart_router)
+app.include_router(orders_router)
 #modulo inventario
 #modulo carrito
 #modulo ordenes

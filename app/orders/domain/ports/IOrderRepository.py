@@ -10,7 +10,7 @@ class IOrderRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def update_order_state_by_id(self, order_id: str) -> None:
+    async def update_order_state_by_id(self) -> None:
         pass
 
     @abstractmethod
@@ -18,9 +18,13 @@ class IOrderRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def get_orders(self) -> List[T]:
+    async def get_orders(self, user_id: str) -> List[T]:
         pass
 
     @abstractmethod
     async def cancel_order(self, order_id: str) -> None:
+        pass
+
+    @abstractmethod
+    async def create_order_item(self) -> None:
         pass

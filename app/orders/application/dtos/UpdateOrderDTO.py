@@ -1,5 +1,4 @@
 from pydantic import BaseModel
 
-class UpdateOrderDto(BaseModel):
-
+class UpdateOrderDTO(BaseModel):
     status: str

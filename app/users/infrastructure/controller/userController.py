@@ -43,7 +43,7 @@ async def get_users(session: AsyncSession = Depends(get_session), role: str = Qu
     repo = UserRepository(session)
     user_service =GetUsersService(repo)
     respuesta = await user_service.list_users(role)
-    return respuesta
+    return respuesta    
 
 @router.get("/users/{user_id}",status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["superadmin"]))]) 
 async def get_user_by_id(user_id:str,session: AsyncSession = Depends(get_session)):

@@ -1,7 +1,7 @@
 from app.orders.domain.ports.IOrderRepository import IOrderRepository
 from app.orders.domain.aggregate.aggregate_order import OrderAggregate
 
-class GetOrderById:
+class GetOrderByIdService:
     def __init__(self, repo: IOrderRepository[OrderAggregate]):
         self.repo = repo
 

@@ -1,5 +1,5 @@
 from typing import List
-from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from sqlalchemy.future import select
 from app.users.domain.port.IUserRepository import IUserRepository
@@ -70,7 +70,7 @@ class UserRepository(IUserRepository[User]):
 
     async def get_user_by_id(self, user_id: str, retorar_dto: bool) -> AggregateUser | UserDto:
         if self.session is not None:
-            result = await self.session.exec(select(User).where(User.id == user_id))
+            result = await self.session.execute(select(User).where(User.id == user_id))
             user = result.scalars().first()
             if user is None:
                 return None
