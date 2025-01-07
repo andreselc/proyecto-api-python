@@ -1,6 +1,7 @@
 from typing import List, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import func
 from app.common.infrastructure.Modelo import OrderModel, ProductModel, User, InventoryModel, OrderItem
 from app.orders.domain.ports.IOrderRepository import IOrderRepository
 from app.orders.domain.aggregate.aggregate_order import OrderAggregate
@@ -173,6 +174,21 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         total_profit_rounded = round(total_profit, 2)
         print(f"Total profit redondeado: {total_profit_rounded}")
         return total_profit_rounded
+    
+    async def get_top_selling_products(self, limit: int) -> List[Tuple[str, int]]:
+        # Obtener los productos más vendidos
+        result = await self.session.execute(
+            select(ProductModel.name, func.sum(OrderItem.quantity).label('total_quantity'))
+            .join(InventoryModel, InventoryModel.product_id == ProductModel.id)
+            .join(OrderItem, OrderItem.inventory_id == InventoryModel.id)
+            .join(OrderModel, OrderModel.id == OrderItem.order_id)
+            .where(OrderModel.status == "completed")
+            .group_by(ProductModel.name)
+            .order_by(func.sum(OrderItem.quantity).desc())
+            .limit(limit)
+        )
+        top_selling_products = result.all()
+        return [(product_name, total_quantity) for product_name, total_quantity in top_selling_products]
 
     
     

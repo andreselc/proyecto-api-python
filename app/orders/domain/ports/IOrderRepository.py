@@ -48,4 +48,9 @@ class IOrderRepository(ABC, Generic[T]):
     @abstractmethod
     async def get_profit_by_product_id(self, product_id: str) -> T:
         pass
+
+    @abstractmethod
+    async def get_top_selling_products(self, limit: int) -> List[Tuple[str, int]]:
+        pass
+    
     
