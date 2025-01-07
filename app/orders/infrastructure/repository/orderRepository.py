@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.common.infrastructure.Modelo import OrderModel, ProductModel, User, InventoryModel, OrderItem
@@ -8,6 +8,7 @@ from app.inventory.domain.aggregate.aggregate_inventory import InventoryAggregat
 from app.orders.infrastructure.mappers.model_to_domain import model_to_domain
 from app.orders.infrastructure.mappers.aggregate_to_model import aggregate_to_model
 from app.orders.infrastructure.mappers.aggregate_to_model_OrderItem import aggregate_to_model_order_item
+from app.common.infrastructure.Modelo import OrderItem
 from datetime import datetime
 
 class OrderRepository(IOrderRepository[OrderAggregate]):
@@ -87,6 +88,10 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         await self.session.commit()
         await self.session.refresh(order_item)
 
+    async def get_order_items(self, order_id: str) -> List[Tuple[str, int]]:
+        result = await self.session.execute(select(OrderItem).where(OrderItem.order_id == order_id))
+        order_items = result.scalars().all()
+        return [(order_item.inventory_id, order_item.quantity) for order_item in order_items]
     
 
     

@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar, List, Tuple
 from abc import ABC, abstractmethod
 
 T = TypeVar('T')
@@ -27,4 +27,8 @@ class IOrderRepository(ABC, Generic[T]):
 
     @abstractmethod
     async def create_order_item(self) -> None:
+        pass
+
+    @abstractmethod
+    async def get_order_items(self, order_id: str) -> List[Tuple[str, int]]:
         pass
