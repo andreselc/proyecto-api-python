@@ -7,6 +7,7 @@ class GetInventoryByProductIdService:
 
     async def get_inventory_by_product_id(self, product_id: str) -> InventoryAggregate:
         inventory_aggregate = await self.repo.get_inventory_by_product_id(product_id)
+        inventory_aggregate.id.get()
         if not inventory_aggregate:
             raise ValueError(f"There is no product with that id {product_id} associated with an inventory ")
         return inventory_aggregate

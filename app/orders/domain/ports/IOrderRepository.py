@@ -36,3 +36,13 @@ class IOrderRepository(ABC, Generic[T]):
     @abstractmethod
     async def get_total_sales(self) -> int:
         pass
+
+    @abstractmethod
+    async def get_sales_by_product_id(self, product_id: str) -> T:
+        pass
+
+    @abstractmethod
+    async def get_total_profit(self) -> T:
+        pass
+
+    

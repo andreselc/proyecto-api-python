@@ -98,6 +98,53 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         total_sales = result.scalars().all()
         return len(total_sales)
     
+    async def get_sales_by_product_id(self, product_id: str) -> int:
+        # Obtener el inventory_id del producto
+        inventory_result = await self.session.execute(select(InventoryModel).where(InventoryModel.product_id == product_id))
+        inventory_model = inventory_result.scalar_one_or_none()
+        if not inventory_model:
+            raise ValueError(f"No inventory found for product_id {product_id}")
+
+        inventory_id = inventory_model.id
+
+        # Obtener las órdenes completadas que contienen el inventory_id
+        order_items_result = await self.session.execute(select(OrderItem).where(OrderItem.inventory_id == inventory_id))
+        order_items = order_items_result.scalars().all()
+
+        completed_orders_count = 0
+        for order_item in order_items:
+            order_result = await self.session.execute(select(OrderModel).where(OrderModel.id == order_item.order_id, OrderModel.status == "completed"))
+            order_model = order_result.scalar_one_or_none()
+            if order_model:
+                completed_orders_count += 1
+
+        return completed_orders_count
+    
+    async def get_total_profit(self) -> float:
+        # Obtener todos los order_items de órdenes completadas
+        completed_orders_result = await self.session.execute(select(OrderItem).join(OrderModel).where(OrderModel.status == "completed"))
+        order_items = completed_orders_result.scalars().all()
+
+        total_profit = 0.0
+        for order_item in order_items:
+            # Obtener el inventory_id del order_item
+            inventory_result = await self.session.execute(select(InventoryModel).where(InventoryModel.id == order_item.inventory_id))
+            inventory_model = inventory_result.scalar_one_or_none()
+            if inventory_model:
+                # Obtener el product_id del inventory
+                product_result = await self.session.execute(select(ProductModel).where(ProductModel.id == inventory_model.product_id))
+                product_model = product_result.scalar_one_or_none()
+                if product_model:
+                    # Calcular la ganancia
+                    profit = (product_model.price - product_model.cost) * order_item.quantity
+                    total_profit += profit
+                    print(f"Profit actual: {profit}, Total acumulado: {total_profit}")
+
+        # Redondear el total de ganancias a dos decimales
+        total_profit_rounded = round(total_profit, 2)
+        print(f"Total profit redondeado: {total_profit_rounded}")
+        return total_profit_rounded
+    
 
     
     
