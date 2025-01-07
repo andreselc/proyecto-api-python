@@ -1,14 +1,11 @@
 from app.orders.domain.ports.IOrderRepository import IOrderRepository
 from app.orders.domain.aggregate.aggregate_order import OrderAggregate
-from app.products.domain.aggregate_root import ProductAggregate
 from app.users.domain.aggregate.aggregate_user import AggregateUser
 from app.shopping_cart.application.services.getShoppinCartProducts import GetShoppinCartProducts
 from app.shopping_cart.application.services.deleteShoppinCartProduct import DeleteShoppinCartProductService
 from uuid import uuid4
 from app.orders.infrastructure.mappers.aggregate_to_model_OrderItem import aggregate_to_model_order_item
 from app.inventory.application.services.getInventoryByProductId import GetInventoryByProductIdService
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException, status
 
 class CreateOrderService:
@@ -19,11 +16,7 @@ class CreateOrderService:
         self.delete_shopping_cart_service = delete_shopping_cart_service
 
     async def create_order(self, user_id: str, user_aggregate: AggregateUser) -> OrderAggregate:
-        print("Entre al servicio")
-
-        if user_aggregate is None:
-            print("Estoy en el servicio")
-            
+         
         # Obtener los productos del carrito del usuario
         cart_products = await self.shopping_cart_service.get_shoppin_cart_products(user_id)
         
@@ -46,8 +39,6 @@ class CreateOrderService:
             role=user_aggregate.user.role.value
         )
 
-        print("Precio total: ", order_aggregate.order.totalprice.get())
-
         # Guardar la orden en la base de datos
         await self.repo.create_order(order_aggregate)
 
@@ -58,8 +49,5 @@ class CreateOrderService:
             order_item = aggregate_to_model_order_item(order_aggregate, inventory_aggregate, cart_product)
             await self.repo.create_order_item(order_item)
             await self.delete_shopping_cart_service.delete_shoppin_cart_product(inventory_aggregate.id.get(), user_id, cart_product.product.id.get())
-
- 
-            
 
         return order_aggregate

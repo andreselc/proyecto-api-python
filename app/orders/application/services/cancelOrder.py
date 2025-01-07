@@ -19,8 +19,6 @@ class CancelOrderService:
         order_aggregate = await self.repo.get_order_by_id(order_id)
         if not order_aggregate:
             raise ValueError(f"Order with id {order_id} not found")
-        
-        print("Antes de cancelar: ", order_aggregate.order.status.value)
 
         # Verificar que la orden pertenece al usuario logeado o que el usuario es un gerente
         if order_aggregate.user.id.get() != user_id and user_role != "manager":
@@ -48,9 +46,7 @@ class CancelOrderService:
             )
             await self.inventory_update_service.update_inventory(inventory_aggregate.id.get(), update_inventory_dto)
 
-
         order_aggregate_evento = await self.repo.get_order_by_id(order_id)
-        print("Despues de cancelar: ", order_aggregate_evento.order.status.value)
 
         # Publicar el evento de dominio
         event = OrderUpdatedEvent(status=order_aggregate_evento.order.status.value, order_id=order_aggregate_evento.id.get(), username=order_aggregate_evento.user.username.get())

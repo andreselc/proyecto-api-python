@@ -5,8 +5,6 @@ from app.orders.domain.events.orderUpdatedEvent import OrderUpdatedEvent
 from app.orders.application.events.orderEventHandler import OrderUpdatedEventHandler
 from app.inventory.application.services.getInventoryById import GetInventoryByIdService
 from app.inventory.application.services.updateInventory import UpdateInventoryService
-from app.common.infrastructure.Modelo import OrderItem
-from app.orders.infrastructure.mappers.aggregate_to_model_OrderItem import aggregate_to_model_order_item
 from app.inventory.application.dtos.updateInventoryDto import UpdateInventoryDto
 
 class UpdateOrderStateByIdService:
@@ -21,8 +19,6 @@ class UpdateOrderStateByIdService:
 
         if not order_aggregate:
             raise ValueError(f"Order with id {order_id} not found")
-        
-        print("Antes de actualizar: ",order_aggregate.order.status.value)
         
         # Verificar que el usuario tiene el rol de manager
         if user_role != "manager":
