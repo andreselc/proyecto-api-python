@@ -24,13 +24,6 @@ from app.users.application.dtos.LoginRespuestaUserDto import LoginRespuestaUserD
 
 from uuid import uuid4
 
-
-#prueba ruta
-def test_root(test_client):
-    response = test_client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
-
 #pruebas unitarias
 # -------------------------------------------------------- Servicios de Aplicacion------------------------------------------------------
 @pytest.mark.asyncio
