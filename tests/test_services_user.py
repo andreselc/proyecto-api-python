@@ -24,8 +24,14 @@ from app.users.application.dtos.LoginRespuestaUserDto import LoginRespuestaUserD
 
 from uuid import uuid4
 
-#pruebas unitarias
 
+#prueba ruta
+def test_root(test_client):
+    response = test_client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello World"}
+
+#pruebas unitarias
 # -------------------------------------------------------- Servicios de Aplicacion------------------------------------------------------
 @pytest.mark.asyncio
 async def test_create_user_success(user_payload):
@@ -267,7 +273,6 @@ async def test_update_user_success(update_user_payload):
     assert result is True
 
    
-
 @pytest.mark.asyncio
 @patch("app.users.auth.utils.verify_password", return_value=True)
 async def test_login_user_success(mock_verify_password, login_user_payload):

@@ -19,5 +19,5 @@ class CreateInventoryService:
             cost=product_aggregate.product.cost.get(),
             status="active"
         )
-        await self.repo.create_inventory(inventory_aggregate, inventory_dto.product_id)
+        await self.repo.create_inventory(inventory_aggregate)
         return inventory_aggregate

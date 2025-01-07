@@ -11,8 +11,8 @@ class InventoryRepository(IInventoryRepository[InventoryAggregate]):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create_inventory(self, inventory_aggregate: InventoryAggregate, product_id: str, ) -> None:
-        inventory_model = aggregate_to_model(inventory_aggregate, product_id)
+    async def create_inventory(self, inventory_aggregate: InventoryAggregate) -> None:
+        inventory_model = aggregate_to_model(inventory_aggregate)
         self.session.add(inventory_model)
         await self.session.commit()
         await self.session.refresh(inventory_model)
