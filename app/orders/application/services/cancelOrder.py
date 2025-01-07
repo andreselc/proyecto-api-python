@@ -6,6 +6,7 @@ from app.orders.application.events.orderEventHandler import OrderUpdatedEventHan
 from app.inventory.application.services.getInventoryById import GetInventoryByIdService
 from app.inventory.application.services.updateInventory import UpdateInventoryService
 from app.inventory.application.dtos.updateInventoryDto import UpdateInventoryDto
+from fastapi import HTTPException, status
 
 class CancelOrderService:
     def __init__(self, repo: IOrderRepository[OrderAggregate], event_handler: OrderUpdatedEventHandler, inventory_service: GetInventoryByIdService, inventory_update_service: UpdateInventoryService):
@@ -22,12 +23,12 @@ class CancelOrderService:
         print("Antes de cancelar: ", order_aggregate.order.status.value)
 
         # Verificar que la orden pertenece al usuario logeado o que el usuario es un gerente
-        if order_aggregate.user.id != user_id and user_role != "manager":
-            raise PermissionError("You do not have permission to cancel this order")
+        if order_aggregate.user.id.get() != user_id and user_role != "manager":
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission to cancel this order")
         
         # Verificar que el cliente solo puede cancelar órdenes pendientes
-        if user_role == "customer" and order_aggregate.status != "pending":
-            raise ValueError("Customers can only cancel pending orders")
+        if user_role == "customer" and order_aggregate.order.status.value != "pending":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Customers can only cancel pending orders")
         
 
         order_aggregate.update(

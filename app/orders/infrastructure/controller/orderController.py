@@ -91,7 +91,7 @@ async def complete_order(current_user: Annotated[User, Depends(get_current_user)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@router.patch("/orders/cancel/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
+@router.patch("/orders/cancel/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["customer", "manager"]))], response_model=None)
 async def cancel_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
     repoI = InventoryRepository(session)
