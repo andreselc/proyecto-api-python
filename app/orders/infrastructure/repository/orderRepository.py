@@ -93,6 +93,11 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         order_items = result.scalars().all()
         return [(order_item.inventory_id, order_item.quantity) for order_item in order_items]
     
+    async def get_total_sales(self) -> int:
+        result = await self.session.execute(select(OrderModel).where(OrderModel.status == "completed"))
+        total_sales = result.scalars().all()
+        return len(total_sales)
+    
 
     
     
