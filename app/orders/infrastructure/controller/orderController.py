@@ -26,6 +26,7 @@ from app.users.auth.auth import get_current_user
 from app.users.auth.Role_Checker import RoleChecker
 from app.users.domain.aggregate.aggregate_user import AggregateUser
 from app.common.infrastructure.Modelo import User
+from app.orders.application.events.orderEventHandler import OrderUpdatedEventHandler
 
 router = APIRouter(
     tags=["Orders"]
@@ -73,36 +74,31 @@ async def get_order_by_id(order_id: str, session: AsyncSession = Depends(databas
         return domain_to_dto(order_aggregate)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
-    
-# @router.patch("/orders/update/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
-# async def update_order_as_completed(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_dto: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
-#     repo = OrderRepository(session)
-#     order_service = UpdateOrderStateByIdService(repo)
-#     try:
-#         success = await order_service.update_order_state_by_id(order_id, current_user.role, order_dto)
-#         if success:
-#             return {"message": "Order completed successfully"}
-#     except ValueError as e:
-#         raise HTTPException(status_code=400, detail=str(e))
 
 @router.patch("/orders/update/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
-async def update_order_as_completed(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
+async def complete_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
     repoI = InventoryRepository(session)
     inventory_service = GetInventoryByIdService(repoI)
     inventory_update_service = UpdateInventoryService(repoI)
-    order_service = UpdateOrderStateByIdService(repo, inventory_service, inventory_update_service)
+    event_handler = OrderUpdatedEventHandler()
+    order_service = UpdateOrderStateByIdService(repo, inventory_service, inventory_update_service, event_handler)
+    
     try:
-        success = await order_service.update_order_state_by_id(order_id, current_user.role, order_update,)
+        success = await order_service.update_order_state_by_id(order_id, current_user.role, order_update)
         if success:
             return {"message": "Order completed successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.patch("/orders/cancel/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
-async def update_order_as_canceled(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
+async def cancel_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
-    order_service = CancelOrderService(repo)
+    repoI = InventoryRepository(session)
+    inventory_service = GetInventoryByIdService(repoI)
+    inventory_update_service = UpdateInventoryService(repoI)
+    event_handler = OrderUpdatedEventHandler()
+    order_service = CancelOrderService(repo, event_handler, inventory_service, inventory_update_service)
     try:
         success = await order_service.cancel_order(order_id, current_user.id, current_user.role, order_update)
         if success:

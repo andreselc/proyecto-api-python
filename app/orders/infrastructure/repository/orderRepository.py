@@ -26,9 +26,9 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         if order_model:
             order_model.status = "completed"
             order_model.updated_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            print("Entre aqui 4")
             await self.session.merge(order_model)
             await self.session.commit()
+            order_aggregate.update(status="completed")
         return order_aggregate
     
     async def get_order_by_id(self, order_id: str) -> OrderAggregate:
