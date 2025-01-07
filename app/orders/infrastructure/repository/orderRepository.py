@@ -145,6 +145,34 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         print(f"Total profit redondeado: {total_profit_rounded}")
         return total_profit_rounded
     
+    async def get_profit_by_product_id(self, product_id: str) -> float:
+        # Obtener el inventory_id del producto
+        inventory_result = await self.session.execute(select(InventoryModel).where(InventoryModel.product_id == product_id))
+        inventory_model = inventory_result.scalar_one_or_none()
+        if not inventory_model:
+            raise ValueError(f"No inventory found for product_id {product_id}")
+
+        inventory_id = inventory_model.id
+
+        # Obtener todos los order_items de órdenes completadas que contienen el inventory_id
+        completed_orders_result = await self.session.execute(select(OrderItem).join(OrderModel).where(OrderItem.inventory_id == inventory_id, OrderModel.status == "completed"))
+        order_items = completed_orders_result.scalars().all()
+
+        total_profit = 0.0
+        for order_item in order_items:
+            # Obtener el product_id del inventory
+            product_result = await self.session.execute(select(ProductModel).where(ProductModel.id == inventory_model.product_id))
+            product_model = product_result.scalar_one_or_none()
+            if product_model:
+                # Calcular la ganancia
+                profit = (product_model.price - product_model.cost) * order_item.quantity
+                total_profit += profit
+                print(f"Profit actual: {profit}, Total acumulado: {total_profit}")
+
+        # Redondear el total de ganancias a dos decimales
+        total_profit_rounded = round(total_profit, 2)
+        print(f"Total profit redondeado: {total_profit_rounded}")
+        return total_profit_rounded
 
     
     
