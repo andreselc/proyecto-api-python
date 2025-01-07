@@ -10,6 +10,8 @@ from app.main import app
 from app.users.infrastructure.db.database import get_session
 from app.common.infrastructure.Modelo import User
 from app.users.auth.utils import get_password_hash
+from datetime import datetime
+from uuid import uuid4
 
 # Importar la función get_session de la aplicación
 DATABASE_URL = os.environ.get("DATABASE_URL_TEST")
@@ -82,4 +84,33 @@ def user_payload():
         "username": "johndoe",
         "password": "password",
         "role": "manager"
+    }
+
+@pytest.fixture
+def user_get():
+    return {
+        "id": str(uuid4()),
+        "name": "Johnnathan",
+        "email": "prueba@example.com",
+        "username": "jhonny",
+        "password": "12345",
+        "role": "customer",
+        "createdAt": datetime.now(),
+        "updatedAt": datetime.now()
+    }
+
+@pytest.fixture
+def update_user_payload():
+    return {
+        "name": "John Updated",
+        "email": "john.updated@example.com",
+        "username": "johnupdated",
+        "password": "newpassword"
+    }
+
+@pytest.fixture
+def login_user_payload():
+    return {
+        "username": "johnupdated",
+        "password": "newpassword"
     }

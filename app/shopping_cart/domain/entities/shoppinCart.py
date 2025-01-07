@@ -8,8 +8,8 @@ class ShoppinCart(Entity):
         self.quantity = quantity
 
     @classmethod
-    def create(cls, quantity: int):
-        id = ID.create()
+    def create(cls, id: str ,quantity: int):
+        id = ID.create(id)
         quantity = Quantity.create(quantity)
         return cls(id, quantity)
     
