@@ -67,42 +67,6 @@ def update_order_state_by_id_service(order_repo, inventory_service, inventory_up
     return UpdateOrderStateByIdService(order_repo, inventory_service, inventory_update_service, event_handler)
 
 
-# # este no sirve
-# @pytest.mark.asyncio
-# async def test_create_order_success(create_order_service, order_repo, shopping_cart_service, inventory_service, delete_shopping_cart_service):
-#     # Configurar el mock del servicio de carrito de compras para devolver productos
-#     cart_product = MagicMock()
-#     cart_product.product = MagicMock()
-#     shopping_cart_service.get_shoppin_cart_products.return_value = [cart_product]
-
-#     # Configurar el mock del repositorio para guardar la orden
-#     order_aggregate = MagicMock(spec=OrderAggregate)
-#     order_repo.create_order.return_value = order_aggregate
-
-#     # Configurar el mock del servicio de inventario para devolver inventario
-#     inventory_aggregate = MagicMock()
-#     inventory_service.get_inventory_by_product_id.return_value = inventory_aggregate
-
-#     # Crear el usuario agregado
-#     user_aggregate = MagicMock(spec=AggregateUser)
-#     user_aggregate.user = MagicMock()
-#     user_aggregate.user.id.get.return_value = "user123"
-#     user_aggregate.user.name.get.return_value = "John Doe"
-#     user_aggregate.user.username.get.return_value = "johndoe"
-#     user_aggregate.user.email.get.return_value = "john.doe@example.com"
-#     user_aggregate.user.password.get.return_value = "password"
-#     user_aggregate.user.role.value = "customer"
-
-#     # Llamar al método create_order
-#     result = await create_order_service.create_order("user123", user_aggregate)
-
-#     # Verificar que la orden fue creada y guardada
-#     shopping_cart_service.get_shoppin_cart_products.assert_called_once_with("user123")
-#     order_repo.create_order.assert_called_once()
-#     inventory_service.get_inventory_by_product_id.assert_called()
-#     delete_shopping_cart_service.delete_shoppin_cart_product.assert_called()
-#     assert result == order_aggregate
-
 @pytest.mark.asyncio
 async def test_create_order_no_cart_products(create_order_service, shopping_cart_service):
     # Configurar el mock del servicio de carrito de compras para devolver una lista vacía
@@ -167,39 +131,6 @@ async def test_list_orders_not_found(get_orders_service, order_repo):
     with pytest.raises(ValueError, match="No orders found for user with id user123"):
         await get_orders_service.list_orders("user123")
 
-#NO SIRVEEEEE
-# @pytest.mark.asyncio
-# async def test_cancel_order_success(cancel_order_service, order_repo, inventory_service, inventory_update_service):
-#     # Configurar el mock del repositorio para devolver una orden
-#     order_aggregate = MagicMock(spec=OrderAggregate)
-#     order_aggregate.user = MagicMock()
-#     order_aggregate.user.id.get.return_value = "user123"
-#     order_aggregate.order = MagicMock()
-#     order_aggregate.order.status.value = "pending"  # Asegurarse de que el estado sea "pending"
-#     order_repo.get_order_by_id.return_value = order_aggregate
-
-#     # Configurar el mock del repositorio para devolver los items de la orden
-#     order_items = [("inventory123", 2)]
-#     order_repo.get_order_items.return_value = order_items
-
-#     # Configurar el mock del servicio de inventario para devolver inventario
-#     inventory_aggregate = MagicMock()
-#     inventory_service.get_inventory_by_product_id.return_value = inventory_aggregate
-
-#     # Crear el DTO de actualización de la orden
-#     order_dto = UpdateOrderDTO(status="canceled")
-
-#     # Llamar al método cancel_order
-#     result = await cancel_order_service.cancel_order("order123", "user123", "customer", order_dto)
-
-#     # Verificar que la orden fue cancelada y guardada
-#     order_repo.get_order_by_id.assert_called_once_with("order123")
-#     order_repo.cancel_order.assert_called_once_with(order_aggregate)
-#     inventory_service.get_inventory_by_product_id.assert_called_once_with("inventory123")
-#     inventory_update_service.update_inventory.assert_called_once()
-#     assert result is True
-
-
 @pytest.mark.asyncio
 async def test_cancel_order_not_found(cancel_order_service, order_repo):
     # Configurar el mock del repositorio para devolver None
@@ -244,34 +175,6 @@ async def test_cancel_order_not_pending(cancel_order_service, order_repo):
     with pytest.raises(HTTPException, match="Customers can only cancel pending orders"):
         await cancel_order_service.cancel_order("order123", "user123", "customer", order_dto)
 
-#NO SIRVEEEEE
-# @pytest.mark.asyncio
-# async def test_update_order_state_by_id_success(update_order_state_by_id_service, order_repo, inventory_service, inventory_update_service):
-#     # Configurar el mock del repositorio para devolver una orden
-#     order_aggregate = MagicMock(spec=OrderAggregate)
-#     order_aggregate.order.status.value = "pending"
-#     order_repo.get_order_by_id.return_value = order_aggregate
-
-#     # Configurar el mock del repositorio para devolver los items de la orden
-#     order_items = [("inventory123", 2)]
-#     order_repo.get_order_items.return_value = order_items
-
-#     # Configurar el mock del servicio de inventario para devolver inventario
-#     inventory_aggregate = MagicMock()
-#     inventory_service.get_inventory_by_id.return_value = inventory_aggregate
-
-#     # Crear el DTO de actualización de la orden
-#     order_dto = UpdateOrderDTO(status="completed")
-
-#     # Llamar al método update_order_state_by_id
-#     result = await update_order_state_by_id_service.update_order_state_by_id("order123", "manager", order_dto)
-
-#     # Verificar que la orden fue actualizada y guardada
-#     order_repo.get_order_by_id.assert_called_once_with("order123")
-#     order_repo.update_order_state_by_id.assert_called_once_with(order_aggregate)
-#     inventory_service.get_inventory_by_id.assert_called_once_with("inventory123")
-#     inventory_update_service.update_inventory.assert_called_once()
-#     assert result is True
 
 @pytest.mark.asyncio
 async def test_update_order_state_by_id_not_found(update_order_state_by_id_service, order_repo):
