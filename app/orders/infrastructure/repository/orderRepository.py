@@ -189,6 +189,19 @@ class OrderRepository(IOrderRepository[OrderAggregate]):
         )
         top_selling_products = result.all()
         return [(product_name, total_quantity) for product_name, total_quantity in top_selling_products]
+    
+    async def get_top_customers(self, limit: int) -> List[Tuple[str, int]]:
+        # Obtener los clientes que más han comprado
+        result = await self.session.execute(
+            select(User.name, func.count(OrderModel.id).label('total_orders'))
+            .join(OrderModel, OrderModel.user_id == User.id)
+            .where(OrderModel.status == "completed")
+            .group_by(User.name)
+            .order_by(func.count(OrderModel.id).desc())
+            .limit(limit)
+        )
+        top_customers = result.all()
+        return [(customer_name, total_orders) for customer_name, total_orders in top_customers]
 
     
     

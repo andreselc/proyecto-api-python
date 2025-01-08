@@ -6,8 +6,10 @@ from app.orders.application.services.getSalesByProductId import GetSalesByProduc
 from app.orders.application.services.getTotalProfit import GetTotalProfitService
 from app.orders.application.services.getProfitByProductId import GetProfitByProductIdService
 from app.orders.application.services.getTopSellingProductsService import GetTopSellingProductsService
+from app.orders.application.services.getTopCustomersService import GetTopCustomersService
 from app.reports.infrastructure.db import database
 from app.users.auth.Role_Checker import RoleChecker
+
 router = APIRouter(
     tags=["Reports"]
 )
@@ -67,5 +69,15 @@ async def get_top_selling_products(limit: int = Query(10), session: AsyncSession
     try:
         top_selling_products = await top_selling_service.get_top_selling_products(limit)
         return {"top_selling_products": top_selling_products}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/reports/customers/top", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
+async def get_top_customers(limit: int = 10, session: AsyncSession = Depends(database.get_session)):
+    repo = OrderRepository(session)
+    top_customers_service = GetTopCustomersService(repo)
+    try:
+        top_customers = await top_customers_service.get_top_customers(limit)
+        return {"top_customers": top_customers}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
