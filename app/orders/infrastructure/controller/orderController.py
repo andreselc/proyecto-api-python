@@ -65,7 +65,7 @@ async def get_orders_by_user(current_user: Annotated[User, Depends(get_current_u
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@router.get("/orders/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))])
+@router.get("/orders/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["customer", "manager"]))])
 async def get_order_by_id(order_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
     order_service = GetOrderByIdService(repo)
