@@ -75,13 +75,14 @@ async def get_order_by_id(order_id: str, session: AsyncSession = Depends(databas
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
-@router.patch("/orders/update/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
-async def complete_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
+@router.patch("/orders/complete/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["manager"]))], response_model=None)
+async def complete_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
     repoI = InventoryRepository(session)
     inventory_service = GetInventoryByIdService(repoI)
     inventory_update_service = UpdateInventoryService(repoI)
     event_handler = OrderUpdatedEventHandler()
+    order_update: UpdateOrderDTO = UpdateOrderDTO(status="completed")
     order_service = UpdateOrderStateByIdService(repo, inventory_service, inventory_update_service, event_handler)
     
     try:
@@ -90,14 +91,15 @@ async def complete_order(current_user: Annotated[User, Depends(get_current_user)
             return {"message": "Order completed successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
+
 @router.patch("/orders/cancel/{order_id}", status_code=status.HTTP_200_OK, dependencies=[Depends(RoleChecker(["customer", "manager"]))], response_model=None)
-async def cancel_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, order_update: UpdateOrderDTO, session: AsyncSession = Depends(database.get_session)):
+async def cancel_order(current_user: Annotated[User, Depends(get_current_user)], order_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = OrderRepository(session)
     repoI = InventoryRepository(session)
     inventory_service = GetInventoryByIdService(repoI)
     inventory_update_service = UpdateInventoryService(repoI)
     event_handler = OrderUpdatedEventHandler()
+    order_update: UpdateOrderDTO = UpdateOrderDTO(status="completed")
     order_service = CancelOrderService(repo, event_handler, inventory_service, inventory_update_service)
     try:
         success = await order_service.cancel_order(order_id, current_user.id, current_user.role, order_update)
