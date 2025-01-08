@@ -38,7 +38,7 @@ async def list_products(session: AsyncSession = Depends(database.get_session)):
     products = [domain_to_dto(product) for product in product_aggregates]
     return products
 
-@router.get("/products/{product_id}", status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["manager"]))])
+@router.get("/products/{product_id}", status_code=status.HTTP_200_OK,dependencies=[Depends(RoleChecker(["manager","customer"]))])
 async def get_product_by_id(product_id: str, session: AsyncSession = Depends(database.get_session)):
     repo = ProductRepository(session)
     product_service = GetProductByIdService(repo)
