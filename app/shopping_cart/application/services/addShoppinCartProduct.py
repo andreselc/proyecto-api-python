@@ -16,10 +16,18 @@ class AddShoppinCartProductService:
         shoppin_cart: str = ""
         if existing_shoppin_carts:
             for shoppin_cart in existing_shoppin_carts:
-                shoppin_cart_id = shoppin_cart.shoppin_cart.id.get()
+                shoppin_cart_id = shoppin_cart.shoppin_cart.id.get()    
                 break
         else:
             shoppin_cart_id = str(uuid4())
+
+        #verificacion de producto ya registrado
+        shoppin_cart: str = ""
+        if existing_shoppin_carts:
+            for shoppin_cart in existing_shoppin_carts:
+                if shoppin_cart.product.id.get() == product_aggregate.product.id.get():
+                    raise ValueError(f"The product with the id {product_aggregate.product.id.get()} is already added to the shopping cart")
+                    break
             
         shoppin_cart_aggregate = ShoppinCartAggregate.create(
             id=shoppin_cart_id,

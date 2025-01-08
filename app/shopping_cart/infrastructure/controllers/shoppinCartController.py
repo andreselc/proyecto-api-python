@@ -93,7 +93,7 @@ async def update_product_in_shopping_cart(product_id: str, shoppin_cart_dto: Upd
     inventory_service = GetInventoryByProductIdService(repoI)
     try:
         inventory_aggregate = await inventory_service.get_inventory_by_product_id(product_id)
-        await shoppin_cart_service.update_shoppin_cart_product(inventory_aggregate.inventory.id.get(), current_user.id, product_id, shoppin_cart_dto)
+        await shoppin_cart_service.update_shoppin_cart_product(inventory_aggregate, current_user.id, product_id, shoppin_cart_dto)
         return {"message": "Product updated in shopping cart successfully"}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

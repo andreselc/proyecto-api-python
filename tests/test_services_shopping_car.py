@@ -341,29 +341,45 @@ def shopping_cart_aggregate():
         inventory_quantity=10
     )
 
+@pytest.fixture
+def inventory_aggregate():
+    # Inventario simulado
+    inventory = InventoryAggregate.create(
+        quantity=10,
+        product_id="product_123",
+        name="Example Product",
+        code="EX123",
+        description="Example Description",
+        margin_profit=20.0,
+        cost=50.0,
+        status="active"
+    )
+    return inventory
+
 @pytest.mark.asyncio
 async def test_update_shoppin_cart_product_success(
     update_shoppin_cart_product_service,
     mock_repo,
     update_shopping_cart_dto,
     shopping_cart_aggregate,
+    inventory_aggregate,
 ):
     # Configurar el mock para devolver el agregado correspondiente
     mock_repo.get_shoppin_cart_product_by_id.return_value = shopping_cart_aggregate
 
     # Llamar al servicio
     result = await update_shoppin_cart_product_service.update_shoppin_cart_product(
-        inventory_id="inventory_123",
+        inventory_aggregate=inventory_aggregate,
         user_id="user_123",
         product_id="product_123",
         shoppin_cart_dto=update_shopping_cart_dto
     )
 
     # Verificar que el método del repositorio para obtener el producto fue llamado
-    mock_repo.get_shoppin_cart_product_by_id.assert_awaited_once_with("inventory_123", "user_123", "product_123")
+    mock_repo.get_shoppin_cart_product_by_id.assert_awaited_once_with(inventory_aggregate.inventory.id.get(), "user_123", "product_123")
 
     # Verificar que el método del repositorio para actualizar el producto fue llamado
-    mock_repo.update_shoppin_cart_product.assert_awaited_once_with(shopping_cart_aggregate, "inventory_123")
+    mock_repo.update_shoppin_cart_product.assert_awaited_once_with(shopping_cart_aggregate, inventory_aggregate.inventory.id.get())
 
     # Verificar que el resultado sea True
     assert result is True
@@ -374,6 +390,7 @@ async def test_update_shoppin_cart_product_not_found(
     update_shoppin_cart_product_service,
     mock_repo,
     update_shopping_cart_dto,
+    inventory_aggregate,
 ):
     # Configurar el mock para que no se encuentre el producto
     mock_repo.get_shoppin_cart_product_by_id.return_value = None
@@ -381,7 +398,7 @@ async def test_update_shoppin_cart_product_not_found(
     # Verificar que se lanza una excepción al intentar actualizar un producto inexistente
     with pytest.raises(ValueError) as exc:
         await update_shoppin_cart_product_service.update_shoppin_cart_product(
-            inventory_id="inventory_123",
+            inventory_aggregate=inventory_aggregate,
             user_id="user_123",
             product_id="product_456",
             shoppin_cart_dto=update_shopping_cart_dto
@@ -389,5 +406,5 @@ async def test_update_shoppin_cart_product_not_found(
 
     # Asegurar que el mensaje de error es el esperado
     assert str(exc.value) == "No product associated with that id product_456 in the shopping cart"
-    mock_repo.get_shoppin_cart_product_by_id.assert_awaited_once_with("inventory_123", "user_123", "product_456")
+    mock_repo.get_shoppin_cart_product_by_id.assert_awaited_once_with(inventory_aggregate.inventory.id.get(), "user_123", "product_456")
 
