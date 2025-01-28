@@ -132,3 +132,30 @@ Tendrán disponible apenas corra la aplicacion un usuario (superadmin) default q
 Username: superadmin
 Password: ContraSupAdmin123
 ```
+# Documentacion 
+
+## Modelo Entidad - Relación
+
+![](/Imagenes_readme/ModeloE-R.png)
+
+https://lucid.app/lucidchart/167d5332-6668-493b-bf2d-f0ccfd2daec0/edit?viewport_loc=-1708%2C-1406%2C2800%2C1788%2CgNMwaNC0xaQv&invitationId=inv_ad2bb473-fad9-464e-af4d-1a71e024b603
+
+## Modelo dominio
+
+![](/Imagenes_readme/Modelo-dominio.png)
+
+https://lucid.app/lucidchart/167d5332-6668-493b-bf2d-f0ccfd2daec0/edit?viewport_loc=-4199%2C-5598%2C11806%2C7539%2Cc6qwYhq2sx9t&invitationId=inv_ad2bb473-fad9-464e-af4d-1a71e024b603
+
+## Diagramna de clases
+
+![](/Imagenes_readme/Diagrama-clases.png)
+
+https://lucid.app/lucidchart/167d5332-6668-493b-bf2d-f0ccfd2daec0/edit?viewport_loc=-6502%2C-4763%2C13833%2C8834%2C0_0&invitationId=inv_ad2bb473-fad9-464e-af4d-1a71e024b603
+
+
+## Authors
+
+- ### [@Andrés López](https://github.com/andreselc) [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/andres-lopez-644338281/)
+- ### [@Alex Altuve](https://github.com/Alex-Altuve)  [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alex-altuve-delgado-b1a212288/)
+- ### [@Samuel Ponce](https://github.com/ZamudiaJr)  [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/samuel-ponce-3a35002b0/)
+- ### [@Jhonny Sojo](https://github.com/Jhonnysour)  [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jhonny-sojo-4b76692a1/)
